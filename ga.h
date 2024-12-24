@@ -9,8 +9,15 @@ typedef struct {
     double intraDepotMutationRate;
     double interDepotMutationRate;
     int interDepotMutationAttemptRate;
+    double bound;
+    double alpha;
+    double beta;
+    double probBestIndividualTournament;
+    double probReversal;
+    double probSingle;
+    double elitism;
 } Parameters;
 
-void optimize(int maxIterations, Parameters &parameters, ProblemDescription &problemDescription);
+void optimize(int maxIterations, Parameters &parameters, ProblemDescription &problemDescription, int seed, const std::string& datafile);
 
 #endif

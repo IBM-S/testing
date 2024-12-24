@@ -26,7 +26,7 @@ ProblemDescription problemDescription;
 // Global vector with the swappable depots for each customers
 std::vector<std::vector<int>> swappableCustomers;
 
-int seed = 69420;
+int seed_global;
 
 
 // Euclidean distance
@@ -45,7 +45,7 @@ bool randomCheck(double p){
 // Assign customers to the depot that is closest in terms of euclidian distance
 // Store everything as a vector of vectors and return it
 // No need to use linkedlists, as the method is only called once and the shuffling is much easier
-std::vector<std::vector<int>> assignCustomersDepots(){
+std::vector<std::vector<int>> assignCustomersDepots(double bound){
     std::vector<std::vector<int>> assignment(problemDescription.t); // Initialize a vector of empty vectors
     swappableCustomers = std::vector<std::vector<int>>(problemDescription.n); // Initialize a vector of vectors containing other close depots to each customer
     for(int i = 0; i < problemDescription.n; i++){
@@ -74,7 +74,7 @@ std::vector<std::vector<int>> assignCustomersDepots(){
             depotX = problemDescription.depots[j].x;
             depotY = problemDescription.depots[j].y;
             dist = l2(customerX - depotX, customerY - depotY);
-            if((dist - closestDistance) / closestDistance <= 2 && 2 * dist <= problemDescription.depots[j].D){
+            if((dist - closestDistance) / closestDistance <= bound && 2 * dist <= problemDescription.depots[j].D){
                 swappableCustomers[i].push_back(j);
             }
         }
@@ -86,13 +86,13 @@ std::vector<std::vector<int>> assignCustomersDepots(){
 // Create a vector of chromosomes to return as the population
 // Then create an initial assignment of customers to depots
 // To make a random population, go through every chromosome, and assign to it a random shuffle of the distance-assignment
-std::vector<Chromosome> generatePopulation(int populationSize){
+std::vector<Chromosome> generatePopulation(int populationSize, double bound){
     std::vector<Chromosome> population(populationSize, std::vector<std::list<int>>(problemDescription.t));
 
-    std::vector<std::vector<int>> assignment = assignCustomersDepots(); // vector instead of list because of std::shuffle()
+    std::vector<std::vector<int>> assignment = assignCustomersDepots(bound); // vector instead of list because of std::shuffle()
 
     //unsigned int pseed = std::chrono::system_clock::now().time_since_epoch().count();
-    unsigned int pseed = seed;
+    unsigned int pseed = seed_global;
 
     for(int i = 0; i < populationSize; i++){
         for(int j = 0; j < problemDescription.t; j++){
@@ -270,13 +270,9 @@ Routing getRouting(Chromosome &chromosome){
 // - vehicles over the max allowed (constraint)
 // - vehicle distance over the max allowed (constraint)
 // Weight the constraints highest to ensure that they are prioritized
-double fitness(Routing &routing){
+double fitness(Routing &routing, double alpha, double beta){
 
-    double alpha = 100;
-    double beta = 0.001;
-    double gamma = 2;
-
-    double overDistance = 0;
+    /* double overDistance = 0;
     for(int i = 0; i < routing.size(); i++){
         for(int j = 0; j < routing[i].size(); j++){
             double d = getRouteDistance(i, routing[i][j]);
@@ -285,22 +281,22 @@ double fitness(Routing &routing){
                 overDistance += dd;
             }
         }
-    }
+    } */
 
-    return alpha * getRoutingVehicleAmount(routing) + beta * getRoutingDistance(routing) + gamma * overDistance;
+    return alpha * getRoutingVehicleAmount(routing) + beta * getRoutingDistance(routing); //+ 2 * overDistance;
 }
 
 
 // Calculate the fitness of every individual in the population and return them as a vector
 // Also calculate the average and optimal fitnesses of the entire population and insert it as the two last elements of the vector
-std::vector<double> calculatePopulationFitness(std::vector<Routing> &population){
+std::vector<double> calculatePopulationFitness(std::vector<Routing> &population, double alpha, double beta){
     int n = population.size();
     std::vector<double> populationFitness(n + 2);
     double averageFitness = 0;
     double optimalFitness = 1000000;
 
     for(int i = 0; i < n; i++){
-        double f = fitness(population[i]);
+        double f = fitness(population[i], alpha, beta);
         populationFitness[i] = f;
         averageFitness += f;
         if(f < optimalFitness){
@@ -316,11 +312,11 @@ std::vector<double> calculatePopulationFitness(std::vector<Routing> &population)
 
 
 // Tournament selection with k = 2
-int parentSelection(std::vector<double> &populationFitness){
+int parentSelection(std::vector<double> &populationFitness, double probBestindividualTournament){
     int index1 = rand() % (populationFitness.size() - 2);
     int index2 = rand() % (populationFitness.size() - 2);
-
-    if(randomCheck(0.8)){
+    //std::cout << "prob best individual tournament" << probBestindividualTournament << std::endl;
+    if(randomCheck(probBestindividualTournament)){
         if(populationFitness[index1] < populationFitness[index2]){
             return index1;
         }
@@ -385,7 +381,7 @@ void crossoverOld(Routing &parent1, Routing &parent2){
 
     for(int customer : route1){
         bool inserted = false;
-        if(randomCheck(1.0)){
+        if(randomCheck(0.8)){
             for(int i = 0; i < parent2[depot].size(); i++){
                 it = parent2[depot][i].begin();
                 while(it != parent2[depot][i].end()){
@@ -413,7 +409,7 @@ void crossoverOld(Routing &parent1, Routing &parent2){
 
     for(int customer : route2){
         bool inserted = false;
-        if(randomCheck(1.0)){
+        if(randomCheck(0.8)){
             for(int i = 0; i < parent1[depot].size(); i++){
                 it = parent1[depot][i].begin();
                 while(it != parent1[depot][i].end()){
@@ -570,12 +566,30 @@ void crossover(Routing &parent1, Routing &parent2){
 
 // Choose one of three random mutations for routes within the same depot
 // Each mutation has an equal probability to be selected
-void intraDepotMutate(int depot, Routing &offspring){
+void intraDepotMutate(int depot, Routing &offspring, double probReversal, double probSingle){
     if(offspring[depot].size() == 0){
         return;
     }
 
-    if(randomCheck(0.33)){ // Reversal mutation
+    double probSwap;
+
+    if (probReversal > 1.0) {
+        probReversal = 1.0;
+        probSingle = 0.0;
+        //probSwap = 0.0;
+    } else if (probReversal + probSingle > 1.0) {
+        probSingle = 1.0 - probReversal; 
+        //probSwap = 0.0;
+    } else {
+        //probSwap = 1.0 - (probReversal + probSingle);
+    }
+    /* std::cout << "acum prob reversal " << probReversal << std::endl;
+    std::cout << " prob single " << probSingle << std::endl;
+    std::cout << "acum prob single " << probSingle + probReversal << std::endl;
+
+    std::cout << " prob swap " << 1 - (probReversal + probSingle) << std::endl;
+    std::cout << "acum prob swap " << 1 << std::endl; */
+    if(randomCheck(probReversal)){ // Reversal mutation
 
         // Convert to the chromosome to make it easier to ensure that constraints are satisfied
         Chromosome offspringChromosome(problemDescription.t);
@@ -613,7 +627,7 @@ void intraDepotMutate(int depot, Routing &offspring){
         // Convert back to the routing
         offspring = getRouting(offspringChromosome);
 
-    }else if(randomCheck(0.5)){ // Single customer re-routing
+    }else if(randomCheck(probSingle + probReversal)){ // Single customer re-routing
         int routeIndex = rand() % offspring[depot].size();
 
         if(offspring[depot][routeIndex].size() == 0){
@@ -809,7 +823,7 @@ void signalHandler(int signum){
 
 // Run the GA with the given parameters and problem description
 // Save the output to solution.txt and the visualiztion to output.js
-void optimize(int maxGenerations, Parameters &parameters, ProblemDescription &pd){
+void optimize(int maxGenerations, Parameters &parameters, ProblemDescription &pd, int seed, const std::string& datafile){
     
     signal(SIGINT, signalHandler);
 
@@ -818,6 +832,16 @@ void optimize(int maxGenerations, Parameters &parameters, ProblemDescription &pd
     double intraDepotMutationRate = parameters.intraDepotMutationRate;
     double interDepotMutationRate = parameters.interDepotMutationRate;
     int interDepotMutationAttemptRate = parameters.interDepotMutationAttemptRate;
+    double bound = parameters.bound; 
+    double alpha = parameters.alpha;
+    double beta = parameters.beta;
+    double probBestIndividualTournament = parameters.probBestIndividualTournament;
+    double probReversal = parameters.probReversal;
+    double probSingle = parameters.probSingle;
+    double elitism = parameters.elitism;
+
+    seed_global = seed;
+
 
     problemDescription = pd;
 
@@ -827,22 +851,22 @@ void optimize(int maxGenerations, Parameters &parameters, ProblemDescription &pd
     std::vector<double> averageFitness(maxGenerations + 1, 0);
     std::vector<double> optimalFitness(maxGenerations + 1, 0);
 
-    std::vector<Chromosome> chromosomePopulation = generatePopulation(populationSize);
+    std::vector<Chromosome> chromosomePopulation = generatePopulation(populationSize, bound);
 
     std::vector<Routing> population(populationSize);
     for(int i = 0; i < populationSize; i++){
         population[i] = getRouting(chromosomePopulation[i]);
     }
 
-    std::vector<double> populationFitness = calculatePopulationFitness(population);
+    std::vector<double> populationFitness = calculatePopulationFitness(population, alpha, beta);
     averageFitness[0] = populationFitness[populationSize];
     optimalFitness[0] = populationFitness[populationSize + 1];
 
     std::vector<Routing> nextPopulation(populationSize); // Initialize outside the main loop
 
-    int onePercent = populationSize / 100;
-    if(onePercent % 2 == 1){
-        onePercent++;
+    int elitismCount = (populationSize * elitism );
+    if(elitismCount % 2 == 1){
+        elitismCount++;
     }
 
     std::vector<int> populationIndexes(populationSize);
@@ -853,12 +877,13 @@ void optimize(int maxGenerations, Parameters &parameters, ProblemDescription &pd
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
     Routing bestRouting;
+    int contador_imagen = 0;
     for(int i = 0; i < maxGenerations; i++){
         int mutationDepot = rand() % problemDescription.t;
 
-        for(int j = 0; j < populationSize - onePercent; j += 2){
-            int parent1Index = parentSelection(populationFitness);
-            int parent2Index = parentSelection(populationFitness);
+        for(int j = 0; j < populationSize - elitismCount; j += 2){
+            int parent1Index = parentSelection(populationFitness, probBestIndividualTournament);
+            int parent2Index = parentSelection(populationFitness, probBestIndividualTournament);
             nextPopulation[j] = population[parent1Index];
             nextPopulation[j + 1] = population[parent2Index];
 
@@ -869,8 +894,8 @@ void optimize(int maxGenerations, Parameters &parameters, ProblemDescription &pd
                 interDepotMutate(mutationDepot, nextPopulation[j]);
                 interDepotMutate(mutationDepot, nextPopulation[j + 1]);
             }else if(randomCheck(intraDepotMutationRate)){
-                intraDepotMutate(mutationDepot, nextPopulation[j]);
-                intraDepotMutate(mutationDepot, nextPopulation[j + 1]);
+                intraDepotMutate(mutationDepot, nextPopulation[j], probReversal, probSingle);
+                intraDepotMutate(mutationDepot, nextPopulation[j + 1], probReversal, probSingle);
             }
         }
 
@@ -878,28 +903,64 @@ void optimize(int maxGenerations, Parameters &parameters, ProblemDescription &pd
         std::sort(populationIndexes.begin(), populationIndexes.end(), [populationFitness](int index1, int index2){
             return populationFitness[index1] < populationFitness[index2];
         });
-        for(int j = 0; j < onePercent; j++){
-            nextPopulation[populationSize - onePercent + j] = population[populationIndexes[j]];
+        for(int j = 0; j < elitismCount; j++){
+            nextPopulation[populationSize - elitismCount + j] = population[populationIndexes[j]];
         }
 
-        if(i % 50 == 0){
+        //Para mostrar rendimineto del algoritmo genetico cada 50 segundos
+        if(i % 500 == 0){
             std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
             int minutes = std::chrono::duration_cast<std::chrono::minutes>(end - begin).count();
             int seconds = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
             seconds %= 60;
 
             bestRouting = population[populationIndexes[0]];
-            std::cout << "Generation: " << i << ", time: " << minutes << "m " << seconds << "s" << std::endl;
+            /* std::cout << "Generation: " << i << ", time: " << minutes << "m " << seconds << "s" << std::endl;
             std::cout << "Optimal distance: " << getRoutingDistance(bestRouting);
             std::cout << ", feasible: " << feasible(bestRouting) << std::endl;
             std::cout << "Optimal fitness: " << optimalFitness[i] << std::endl;
             std::cout << "Average fitness: " << averageFitness[i] << std::endl;
-            std::cout << std::endl;
-        }
+            std::cout << std::endl; */
+        } 
+
+        /* // Definir el intervalo de generaciones
+        int saveInterval = 25; // Guardar la mejor solución cada 25 generaciones
+
+        // Guardar la mejor solución solo si es el múltiplo de 'saveInterval'
+        if (i % saveInterval == -1) {
+            // Obtener la mejor solución de la población
+            bestRouting = population[populationIndexes[0]];
+
+            // Crear y abrir el archivo para guardar la solución de la generación
+            std::ofstream generationFile;
+            generationFile.open("generations/" + std::to_string(contador_imagen + 1) + ".res");
+            contador_imagen++;
+            // Guardar la distancia total de la mejor ruta
+            generationFile << getRoutingDistance(bestRouting) << std::endl;
+
+            // Guardar las rutas y los clientes en la solución
+            for (int q = 0; q < problemDescription.t; q++) {
+                for (int c = 0; c < bestRouting[q].size(); c++) {
+                    generationFile << q + 1 << "\t" << c + 1 << "\t";
+                    generationFile << getRouteDistance(q, bestRouting[q][c]) << "\t";
+                    int vehicleLoad = 0;
+                    std::string routeCustomerString = "0 ";
+                    for (int w : bestRouting[q][c]) {
+                        vehicleLoad += problemDescription.customers[w].q;
+                        routeCustomerString += std::to_string(w + 1) + " ";
+                    }
+                    generationFile << vehicleLoad << "\t";
+                    generationFile << routeCustomerString << "0" << std::endl;
+                }
+            }
+            
+            // Cerrar el archivo después de guardar la información
+            generationFile.close();
+        } */
 
         population = nextPopulation;
 
-        populationFitness = calculatePopulationFitness(population);
+        populationFitness = calculatePopulationFitness(population, alpha, beta);
         averageFitness[i + 1] = populationFitness[populationSize];
         optimalFitness[i + 1] = populationFitness[populationSize + 1];
 
@@ -912,9 +973,20 @@ void optimize(int maxGenerations, Parameters &parameters, ProblemDescription &pd
         return populationFitness[index1] < populationFitness[index2];
     });
     bestRouting = population[populationIndexes[0]];
+    std::cout << "Feasible = " << feasible(bestRouting) << std::endl;
+    std::cout << "F.O = " << getRoutingDistance(bestRouting) << std::endl;
+    std::cout << getRoutingDistance(bestRouting);
+
+    /* std::string separador = "/"; // El separador de la ruta
+    // Encuentra la última posición del separador
+    size_t pos = datafile.find_last_of(separador);
+    // Extrae la subcadena a partir de la posición encontrada hasta el final
+    std::string ultimaParte = datafile.substr(pos + 1);
 
     std::ofstream outputFile;
-    outputFile.open("solution.txt");
+    bool isfeasible = feasible(bestRouting);
+    std::string isfeasibleStr = isfeasible ? "true" : "false";  // Convierte el valor bool a string
+    outputFile.open("EXTRA/solution_"+ ultimaParte +"_"+ isfeasibleStr +".txt");  // Abre el archivo en la carpeta "images"
     outputFile << getRoutingDistance(bestRouting) << std::endl;
     for(int q = 0; q < problemDescription.t; q++){
         for(int c = 0; c < bestRouting[q].size(); c++){
@@ -952,8 +1024,8 @@ void optimize(int maxGenerations, Parameters &parameters, ProblemDescription &pd
     routeStringJS += "];";
 
     std::ofstream outputFileJS;
-    outputFileJS.open("output.js");
+    outputFileJS.open("EXTRA/output.js");
     outputFileJS << depotStringJS << std::endl;
     outputFileJS << routeStringJS << std::endl;
-    outputFileJS.close();
+    outputFileJS.close(); */
 }
