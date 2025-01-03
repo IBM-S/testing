@@ -91,7 +91,7 @@ while [ $# != 0 ]; do
     shift
 done
 
-evaluaciones=1000000
+evaluaciones=100000
 maxGenerations=$(awk "BEGIN {printf \"%d\",(${evaluaciones}/${populationSize})}")
 
 params="${crossoverRate} ${intraMutationRate} ${interMutationRate} ${interAttemptRate} ${bound} ${alpha} ${beta} ${probBestIndividual} ${probReversal} ${probSingle} ${elitism} ${maxGenerations} ${populationSize}"
