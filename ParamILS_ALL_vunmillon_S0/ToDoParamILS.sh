@@ -8,7 +8,7 @@ respaldos=respaldos${algo}
 rm -rf ${respaldos}
 mkdir ${respaldos}
 
-maxSeeds=1
+maxSeeds=10
 for instanceSet in $( cat ${toTune} ); do
         scenario=F${instanceSet}.scn
         instance=F${instanceSet}.inst
