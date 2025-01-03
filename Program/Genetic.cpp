@@ -16,7 +16,7 @@ void Genetic::run()
 		/* LOCAL SEARCH */
 		localSearch.run(offspring, params.penaltyCapacity, params.penaltyDuration);
 		bool isNewBest = population.addIndividual(offspring,true);
-		if (!offspring.eval.isFeasible && params.ran()%2 == 0) // Repair half of the solutions in case of infeasibility
+		if (!offspring.eval.isFeasible && (params.ran() / (double)RAND_MAX) < params.ap.repair) // Repair half of the solutions in case of infeasibility
 		{
 			localSearch.run(offspring, params.penaltyCapacity*10., params.penaltyDuration*10.);
 			if (offspring.eval.isFeasible) isNewBest = (population.addIndividual(offspring,false) || isNewBest);

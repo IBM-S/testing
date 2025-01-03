@@ -1,0 +1,1 @@
+../build/hgs ../Instances/CVRP/X-n157-k13.vrp sol/medium_-1_X-n157-k13.sol -seed 12155 -t 10 > logs/logs_medium_-1_X-n157-k13

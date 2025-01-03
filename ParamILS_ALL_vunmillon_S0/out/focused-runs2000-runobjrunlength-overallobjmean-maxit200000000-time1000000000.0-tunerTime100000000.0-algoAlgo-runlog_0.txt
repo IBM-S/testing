@@ -1,0 +1,9 @@
+bash hgs.sh X-n162-k11.vrp "" 1000000000.0000001 2147483647 2137449171 -it 20000 -lambda 40 -mu 25 -nbClose 0.2 -nbElite 0.16 -nbGranular 0.8 -nbIterPenaltyManagement 100 -penaltyDecrease 0.85 -penaltyIncrease 1.2 -repair 0.5 -targetFeasible 0.2 > /tmp/tmp-2025-01-0312:08:00-0.01650238037109375
+Result for ParamILS: SAT, 0, 14138, 0, 2137449171
+
+bash hgs.sh X-n162-k11.vrp "" 1000000000.0000001 2147483647 2137449171 -it 15000 -lambda 75 -mu 75 -nbClose 0.2 -nbElite 0.16 -nbGranular 0.8 -nbIterPenaltyManagement 2000 -penaltyDecrease 0.2 -penaltyIncrease 1.2 -repair 1.0 -targetFeasible 1.0 > /tmp/tmp-2025-01-0312:20:58-0.6559367179870605
+Result for ParamILS: SAT, 0, 14138, 0, 2137449171
+
+bash hgs.sh X-n162-k11.vrp "" 1000000000.0000001 2147483647 2137449171 -it 10000 -lambda 150 -mu 5 -nbClose 0.2 -nbElite 0.2 -nbGranular 0.01 -nbIterPenaltyManagement 2000 -penaltyDecrease 0.99 -penaltyIncrease 1.5 -repair 0.0 -targetFeasible 0.5 > /tmp/tmp-2025-01-0312:27:25-0.01599597930908203
+Result for ParamILS: SAT, 0, , 0, 2137449171
+

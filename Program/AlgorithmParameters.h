@@ -24,6 +24,8 @@ struct AlgorithmParameters {
 	int nbIterTraces;       // Number of iterations between traces display during HGS execution
 	double timeLimit;		// CPU time limit until termination in seconds. Default value: 0 (i.e., inactive)
 	int useSwapStar;		// Use SWAP* local search or not. Default value: 1. Only available when coordinates are provided.
+
+	double repair;		// Probability of repair after Local Search. Default 2.
 };
 
 #ifdef __cplusplus

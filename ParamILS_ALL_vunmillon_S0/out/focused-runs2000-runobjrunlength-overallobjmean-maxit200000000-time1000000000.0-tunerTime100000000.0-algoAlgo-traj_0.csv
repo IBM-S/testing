@@ -1,0 +1,4 @@
+"Total Time","Mean Performance","Wallclock Time","Incumbent ID","Automatic Configurator Time","Configuration..."
+0.1437, 100000000, 0.0013, 0, 0.1437, it='20000', lambda='40', mu='25', nbClose='0.2', nbElite='0.16', nbGranular='0.8', nbIterPenaltyManagement='100', penaltyDecrease='0.85', penaltyIncrease='1.2', repair='0.5', targetFeasible='0.2'
+0.2994, 14138.0, 778.3730, 0, 0.1994, it='20000', lambda='40', mu='25', nbClose='0.2', nbElite='0.16', nbGranular='0.8', nbIterPenaltyManagement='100', penaltyDecrease='0.85', penaltyIncrease='1.2', repair='0.5', targetFeasible='0.2'
+0.5526, 0.0, 1165.3177, 2, 0.2526, it='10000', lambda='150', mu='5', nbClose='0.2', nbElite='0.2', nbGranular='0.01', nbIterPenaltyManagement='2000', penaltyDecrease='0.99', penaltyIncrease='1.5', repair='0.0', targetFeasible='0.5'

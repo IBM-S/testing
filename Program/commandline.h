@@ -85,6 +85,8 @@ public:
 					ap.penaltyIncrease = atof(argv[i+1]);
 				else if (std::string(argv[i]) == "-penaltyDecrease")
 					ap.penaltyDecrease = atof(argv[i+1]);
+				else if (std::string(argv[i]) == "-repair")
+					ap.repair = atof(argv[i+1]);
 				else
 				{
 					std::cout << "----- ARGUMENT NOT RECOGNIZED: " << std::string(argv[i]) << std::endl;
@@ -118,6 +120,7 @@ public:
 		std::cout << "[-targetFeasible <double>] target ratio of feasible individuals between penalty updates. Defaults to 0.2                        " << std::endl;
 		std::cout << "[-penaltyIncrease <double>] penalty increase if insufficient feasible individuals between penalty updates. Defaults to 1.2      " << std::endl;
 		std::cout << "[-penaltyDecrease <double>] penalty decrease if sufficient feasible individuals between penalty updates. Defaults to 0.85       " << std::endl;
+		std::cout << "[-repair <double>] probability of repair a infeasible solution. Defaults to 0.50       " << std::endl;
 		std::cout << "--------------------------------------------------------------------------------------------------------------------------------" << std::endl;
 		std::cout << std::endl;
 	};
