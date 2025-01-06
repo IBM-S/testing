@@ -20,7 +20,7 @@ def generate_commands(instance, instance_type, file_name):
     type_number = type_to_number[instance_type]
 
     # Formato base para el comando
-    command_template = "./hgs ../Instances/CVRP/{instance}.vrp {type}_{index}_{instance}.sol -seed {seed} -t {time} > logs_{type}_{index}_{instance}"
+    command_template = "../build/hgs ../Instances/CVRP/{instance}.vrp sol/{type}_{index}_{instance}.sol -seed {seed} -t {time} > logs/logs_{type}_{index}_{instance}"
 
     # Calcular el tiempo basado en el nombre de la instancia
     time = calculate_time(instance)

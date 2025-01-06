@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <cstdlib>  // Para la función system()
+#include <chrono> // Para medir el tiempo
+
 
 int main(int argc, char* argv[]) {
     std::string nombreArchivo;
@@ -29,8 +31,16 @@ int main(int argc, char* argv[]) {
         // Leer cada línea del archivo
         while (std::getline(archivo, linea)) {
             if (!linea.empty()) {  // Solo ejecutar si la línea no está vacía
+                // Iniciar el cronómetro
+                auto start = std::chrono::high_resolution_clock::now();
+
                 std::cout << "Ejecutando: " << linea << std::endl;
                 int resultado = system(linea.c_str());  // Ejecuta el comando
+
+                // Detener el cronómetro y calcular la duración
+                auto finish = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double> elapsed = finish - start;
+                std::cout << "Tiempo de ejecución: " << elapsed.count() << " segundos" << std::endl;
                 if (resultado != 0) {
                     std::cerr << "Error al ejecutar el comando: " << linea << std::endl;
                 }
