@@ -53,8 +53,8 @@ file_name = "comandos_para_probar.txt"
 configurations = [
     {"instances": ["X-n242-k48", "X-n916-k207"], "type": "verySmall", "file_name": "comandos.txt"},
     {"instances": ["X-n294-k50", "X-n599-k92"], "type": "small", "file_name": "comandos.txt"},
-    {"instances": ["X-n157-k13", "X-n322-k28"], "type": "medium", "file_name": "comandos.txt"},
-    {"instances": ["X-n115-k10", "X-n359-k29"], "type": "long", "file_name": "comandos.txt"},
+    {"instances": ["X-n322-k28"], "type": "medium", "file_name": "comandos.txt"},
+    {"instances": ["X-n359-k29"], "type": "long", "file_name": "comandos.txt"},
     {"instances": ["X-n190-k8", "X-n1001-k43"], "type": "veryLong", "file_name": "comandos.txt"},
 ]
 

@@ -1,0 +1,29 @@
+
+creador_de_comandos.py
+crea por cada instancia, 10 pruebas con 10 semillas distintas, hay que modificar 
+la variable configurations.
+Instances: nombre de la instancia
+tipo: tipo de instancia
+file name: el archivo de destino de la linea de codigo para probar el funcionamiento
+
+Ejecucion.cpp
+Ejecuta las lineas de consola por medio de un txt. Primero se rcea el ejecutable:
+g++ ejecucion.cpp -o ejec 
+Luego se puede ejecutar de la sgiuente forma
+(1) ./ejec 
+(2) ./ejec -caso caso_juguete.txt
+
+El primero ejecuta el caso por defecto que viene en el codigo ejecucion.cpp y el segundo 
+se le puede especificar un archivo txt a probar.
+
+Cuando se ejecuten las lineas, el resultado va a ir a la carpeta sol, y en logs se encontraran las iteraciones del algoritmo (cada 500 iteracion)
+
+ver_resultados.py
+el codigo va a traer los resultados de las instancias, que se encuentran en la carpeta sol
+muestra los valores de cada una de las 10 ejecuciones del algoritmo y tambien el promedio
+de esas 10 ejecucion. Eso por cada instancia
+
+ver_cap.py
+Calcula la demanda total, la demanda minima, demanda maxima, promedio de demanda y desviacion de la demanda. En la siguiente linea se puede modificar para poder especificar el tipo de instancia:
+if archivo.startswith("Golden_"):
+

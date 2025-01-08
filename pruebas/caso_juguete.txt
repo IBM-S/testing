@@ -1,1 +1,2 @@
-../build/hgs ../Instances/CVRP/X-n115-k10.vrp sol/long_0_X-n115-k10.sol -seed 33958 -t 273.59999999999997 > logs/logs_long_1_X-n115-k10
+../build/hgs ../Instances/CVRP/X-n115-k10.vrp sol/long_0_X-n115-k10.sol -seed 33958 -t 20.0 > logs/logs_long_0_X-n115-k10
+../build/hgs ../Instances/CVRP/X-n115-k10.vrp sol/long_00_X-n115-k10.sol -seed 32542 -t 40.0 > logs/logs_long_00_X-n115-k10

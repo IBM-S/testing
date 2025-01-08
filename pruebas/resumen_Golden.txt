@@ -1,0 +1,24 @@
+Golden_1.vrp total: 4800 - min: 10 - max: 30 - prom: 20.0 - desv: 10.0
+Golden_2.vrp total: 6400 - min: 10 - max: 30 - prom: 20.0 - desv: 10.0
+Golden_3.vrp total: 8000 - min: 10 - max: 30 - prom: 20.0 - desv: 10.0
+Golden_4.vrp total: 9600 - min: 10 - max: 30 - prom: 20.0 - desv: 10.0
+
+Golden_5.vrp total: 4000 - min: 10 - max: 30 - prom: 20.0 - desv: 10.0
+Golden_6.vrp total: 5600 - min: 10 - max: 30 - prom: 20.0 - desv: 10.0
+Golden_7.vrp total: 7200 - min: 10 - max: 30 - prom: 20.0 - desv: 10.0
+Golden_8.vrp total: 8800 - min: 10 - max: 30 - prom: 20.0 - desv: 10.0
+
+Golden_9.vrp total: 13129 - min: 29 - max: 300 - prom: 51.69 - desv: 36.14
+Golden_10.vrp total: 14895 - min: 25 - max: 300 - prom: 46.26 - desv: 33.78
+Golden_11.vrp total: 16680 - min: 23 - max: 300 - prom: 41.91 - desv: 31.67
+Golden_12.vrp total: 18401 - min: 20 - max: 300 - prom: 38.18 - desv: 29.91
+
+Golden_13.vrp total: 24836 - min: 60 - max: 300 - prom: 98.95 - desv: 54.72
+Golden_14.vrp total: 28372 - min: 52 - max: 300 - prom: 88.94 - desv: 52.21
+Golden_15.vrp total: 31944 - min: 47 - max: 300 - prom: 80.87 - desv: 49.74
+Golden_16.vrp total: 35472 - min: 42 - max: 300 - prom: 74.05 - desv: 47.53
+
+Golden_17.vrp total: 4280 - min: 10 - max: 40 - prom: 17.91 - desv: 11.6
+Golden_18.vrp total: 5360 - min: 10 - max: 40 - prom: 17.93 - desv: 11.61
+Golden_19.vrp total: 6440 - min: 10 - max: 40 - prom: 17.94 - desv: 11.62
+Golden_20.vrp total: 7520 - min: 10 - max: 40 - prom: 17.95 - desv: 11.63

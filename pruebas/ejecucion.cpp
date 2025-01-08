@@ -28,6 +28,7 @@ int main(int argc, char* argv[]) {
         }
 
         std::string linea;
+        auto tiempo_total_start = std::chrono::high_resolution_clock::now();
         // Leer cada línea del archivo
         while (std::getline(archivo, linea)) {
             if (!linea.empty()) {  // Solo ejecutar si la línea no está vacía
@@ -46,6 +47,9 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
+        auto tiempo_total_finish = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> t_total = tiempo_total_finish - tiempo_total_start;
+        std::cout << "Tiempo de ejecución: " << t_total.count() << " segundos" << std::endl;
 
     archivo.close();  // Cierra el archivo
 
