@@ -1,0 +1,4 @@
+feature extracion.py
+se ocupa de la siguiente forma:
+python3 feature_extraction.py -d {carpeta donde se encuentran las instancias en el formato vrp lib}
+ej: python3 feature_extraction.py -d vrp_lib_mdvrp/

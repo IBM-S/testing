@@ -112,6 +112,43 @@ def clusteringQuality(clients, labels):
     return quality
     
 
+def calcular_clientes_mas_cercanos (clients, depots):
+    coords_depots = []
+    for i, depot in enumerate(depots):
+        nombre_depot = f'Depot {i+1}'
+        coords_depots.append(((depot.x, depot.y), nombre_depot))
+
+    coords_clients = []
+    for i, client in enumerate(clients):
+        nombre_client = f'Client {i+1}'
+        coords_clients.append(((client.x, client.y), nombre_client))
+
+    cant_clients = len(coords_clients)
+    i = 0
+    mas_cercanos = []
+    for i in range(1, len(coords_depots)+1):
+        mas_cercanos.append([])
+    while i < cant_clients:
+        distancias_al_depot = []
+        for coord, name in coords_depots:
+            distancias = dist(coords_clients[i][0], coord)
+            distancias_al_depot.append(distancias)
+        minimo = min(distancias_al_depot)
+        depot_minimo = distancias_al_depot.index(minimo)
+        mas_cercanos[depot_minimo].append((minimo, coords_clients[i][1]))
+        i+=1
+    return mas_cercanos
+
+def calcular_dist_prom_depot(distancias):
+    numero_de_depots = len(distancias)
+    proms_depot = []
+    i = 0
+    while i < numero_de_depots:
+        values = [x[0] for x in distancias[i]]
+        average = np.mean(values)
+        proms_depot.append(average)
+        i+=1
+    return proms_depot
 features = dict()
 
 
@@ -119,32 +156,40 @@ features = dict()
 #Leemos instancia y generamos modelo
 directory = args.dir
 instances = os.listdir(directory)
-instances = [i for i in instances if ("p") in i]
+instances = [i for i in instances if ("pr") in i]
 first_pass = True
 for instance_name in instances:
     print("Extracting features for: " + instance_name + "   Path: " + directory + instance_name)
     instance = p.read(directory + instance_name, round_func="round")
     model = p.Model.from_data(instance)
     
+    #print(dir(model))
     #Debug
-    """ cliente_codificados = getattr(model, "_clients")
+    cliente_codificados = getattr(model, "_clients")
     contador = 0
     # Iterar sobre los clientes e inspeccionar atributos
-    for i, client in enumerate(cliente_codificados):
+    """ for i, client in enumerate(cliente_codificados):
         contador +=1
-        print(f"\nCliente {i+1}:")
+        print(f"Cliente {i+1}:")
         for attr in dir(client):  # Lista todos los atributos y métodos del cliente
             if not attr.startswith("_"):  # Ignorar atributos o métodos privados
                 try:
                     value = getattr(client, attr)  # Obtén el valor del atributo
-                    print(f"  {attr}: {value}")
+                    #print(f"  {attr}: {value}")
                 except AttributeError as e:
                     print(f"  No se pudo obtener {attr}: {e}")
         demand = getattr(client, 'delivery')
         print(f"x: {getattr(client, 'x')}, y: {getattr(client, 'y')}, demand: {demand[0]}")
-        if contador == 1:
+        if contador == 2:
             break """
-    
+
+    mas_cercanos = calcular_clientes_mas_cercanos(model._clients, model._depots)
+
+    dist_prom_to_depot = calcular_dist_prom_depot(mas_cercanos)
+    for i in range(0, len(model._depots)):
+        features[f'avg_prom_dist_to_depot_{i+1}'] = dist_prom_to_depot[i]
+
+
     #Construimos matriz de distancias (pyvrp ya trabaja con una interna pero no es facilmente accesible)
     clients = model._clients
     distance_matrix = [[] for client in clients]
@@ -167,7 +212,10 @@ for instance_name in instances:
     centroid = model.data().centroid()
 
     # DC3: Distance between centroid and depot
-    features["distance_centroid_depot"] = dist(depot,centroid) / max_possible_distance
+
+    for i in range(0, len(model._depots)):
+        features[f'distance_centroid_depot_{i+1}'] = dist((model._depots[i].x, model._depots[i].y),centroid) / max_possible_distance
+
 
     # DC4: Average client distance to depot
     client_distances_to_depo = [dist((client.x,client.y),depot) for client in clients]
@@ -218,7 +266,7 @@ for instance_name in instances:
     #Iteramos sobre valores de min_samples y usamos el clustering de mayor calidad.
     best_quality = -10000
     best_min_samples = 0
-    for min_samples in range(2,50):
+    for min_samples in range(2,48):
         clustering = OPTICS(min_samples=min_samples).fit(X)
         quality = clusteringQuality(clients,clustering.labels_)
         if (quality > best_quality):
@@ -292,7 +340,7 @@ for instance_name in instances:
     features["inter_cluster_distance"] = average_inter_cluster_distance
 
     # Escritura final de features
-    f = open("_features_pXX.csv","a")
+    f = open("_features_pXX_2.csv","a")
     if first_pass:
         f.write("instance")
         for feature in features.keys():
@@ -309,6 +357,7 @@ for instance_name in instances:
             f.write("," + str(rounded_value))
     f.write("\n") 
     f.close()
+    break
 
 
 

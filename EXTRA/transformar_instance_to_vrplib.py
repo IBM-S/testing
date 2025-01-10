@@ -19,9 +19,16 @@ def procesar_instancia(archivo):
     with open(archivo, 'r') as f:
         primera_linea = f.readline()
         numeros = primera_linea.split()
-        max_number_of_vehicles_in_each_depot = int(numeros[0])
-        total_numbers_of_customer = int(numeros[1])
-        number_of_depots = int(numeros[2])
+
+        if len(numeros) == 4:
+            type = int(numeros[0])
+            max_number_of_vehicles_in_each_depot = int(numeros[1])
+            total_numbers_of_customer = int(numeros[2])
+            number_of_depots = int(numeros[3])
+        else:
+            max_number_of_vehicles_in_each_depot = int(numeros[0])
+            total_numbers_of_customer = int(numeros[1])
+            number_of_depots = int(numeros[2])
         
         segunda_linea = f.readline()
         D, Q = segunda_linea.split()
@@ -51,7 +58,7 @@ def procesar_instancia(archivo):
     _, _, _, nombre = archivo.split("/")
 
     # Crear el nombre del archivo de salida
-    nombre_salida = f'lib_{nombre}'
+    nombre_salida = f'lib_{nombre}.mdvrp'
 
     # Crear la carpeta si no existe
     carpeta_salida = "vrp_lib_mdvrp"
@@ -74,11 +81,11 @@ def procesar_instancia(archivo):
 
         #Coordenadas depots
         for i, (x, y) in enumerate(coords_depots, start=1):
-            f.write(f'{i:<7}{x:<7}{y}\n')
+            f.write(f'{i:<7}{x:<15}{y}\n')
     
         # Coordenadas clientes
         for i, ((x, y), _) in enumerate(coords_Q_clientes, start=1+number_of_depots):
-            f.write(f'{i:<7}{x:<7}{y}\n')  
+            f.write(f'{i:<7}{x:<15}{y}\n')  
         f.write(f'DEMAND_SECTION\n')
 
         #Demanda depots
@@ -114,6 +121,6 @@ resultados = []
 
 # Iterar sobre los archivos
 for archivo in os.listdir(directorio):
-    if archivo.startswith("p"):
+    if archivo.startswith("pr"):
         ruta_completa = os.path.join(directorio, archivo)
         resultados.append((archivo, procesar_instancia(ruta_completa)))
