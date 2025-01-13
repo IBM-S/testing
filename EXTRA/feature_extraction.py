@@ -139,6 +139,28 @@ def calcular_clientes_mas_cercanos (clients, depots):
         i+=1
     return mas_cercanos
 
+def calcular_dist_max_depot(distancias):
+    numero_de_depots = len(distancias)
+    max_depot = []
+    i = 0
+    while i < numero_de_depots:
+        values = [x[0] for x in distancias[i]]
+        max = np.max(values)
+        max_depot.append(max)
+        i+=1
+    return max_depot
+
+def calcular_dist_min_depot(distancias):
+    numero_de_depots = len(distancias)
+    min_depot = []
+    i = 0
+    while i < numero_de_depots:
+        values = [x[0] for x in distancias[i]]
+        min = np.min(values)
+        min_depot.append(min)
+        i+=1
+    return min_depot
+
 def calcular_dist_prom_depot(distancias):
     numero_de_depots = len(distancias)
     proms_depot = []
@@ -149,16 +171,28 @@ def calcular_dist_prom_depot(distancias):
         proms_depot.append(average)
         i+=1
     return proms_depot
+
+def calcular_std_client_distance_to_depot(distancias):
+    numero_de_depots = len(distancias)
+    desv_standard_depot = []
+    i = 0
+    while i < numero_de_depots:
+        values = [x[0] for x in distancias[i]]
+        desv_standard = np.std(values)
+        desv_standard_depot.append(desv_standard)
+        i+=1
+    return desv_standard_depot
+
+
+
 features = dict()
-
-
-
 #Leemos instancia y generamos modelo
 directory = args.dir
 instances = os.listdir(directory)
 instances = [i for i in instances if ("pr") in i]
 first_pass = True
 for instance_name in instances:
+    
     print("Extracting features for: " + instance_name + "   Path: " + directory + instance_name)
     instance = p.read(directory + instance_name, round_func="round")
     model = p.Model.from_data(instance)
@@ -183,13 +217,6 @@ for instance_name in instances:
         if contador == 2:
             break """
 
-    mas_cercanos = calcular_clientes_mas_cercanos(model._clients, model._depots)
-
-    dist_prom_to_depot = calcular_dist_prom_depot(mas_cercanos)
-    for i in range(0, len(model._depots)):
-        features[f'avg_prom_dist_to_depot_{i+1}'] = dist_prom_to_depot[i]
-
-
     #Construimos matriz de distancias (pyvrp ya trabaja con una interna pero no es facilmente accesible)
     clients = model._clients
     distance_matrix = [[] for client in clients]
@@ -202,27 +229,82 @@ for instance_name in instances:
     max_y_value = max([client.y for client in clients])
     max_possible_distance = np.sqrt(max_x_value**2 + max_y_value**2)
 
-    # DC1: Number of clients
-    features["client_number"] = float(len(clients))
+    ##################################################
+    #                                                #
+    #  DC1: Number of clients                        #
+    #                                                #
+    ##################################################
 
-    #Depot Location (siempre hay 1 en las instancias)
-    depot = (model._depots[0].x, model._depots[0].y)
+    features["client_number"] = float(len(clients))
 
     #Centroid of the nodes
     centroid = model.data().centroid()
 
-    # DC3: Distance between centroid and depot
+    ###################################################
+    #                                                 #
+    #  DC3: Distance between centroid and depots      #
+    #                                                 #
+    #  Dos descriptores seleccionados:                #
+    #  distance centroid depot i                      #
+    #  Avg distance centroid depot i                  #
+    #                                                 #
+    ###################################################
+
+    distances_centroid_depots = []
+    # DC3: Distance between centroid and depots
+    for i in range(0, len(model._depots)):
+        distance_value = dist((model._depots[i].x, model._depots[i].y),centroid) / max_possible_distance
+        features[f'dist_centroid_depot_{i+1}'] = distance_value
+        distances_centroid_depots.append(distance_value)
+
+    # Calcular el promedio de las distancias
+    avg_dist_centroid_depots = np.mean(distances_centroid_depots)
+    features[f'avg_dist_centroid_depots'] = avg_dist_centroid_depots
+
+    ###################################################
+    #                                                 #
+    #  DC4: Average client distance to depot          #
+    #  Se divide por max_possible_distance para       #
+    #  normalizar las metricas espaciales y hacerlas  #
+    #  independientes de la escala de la instancia    #
+    #                                                 #
+    #  Dos descriptores seleccionados:                #
+    #  Avg distance to depot i                        #
+    #  Avg Avg distance to depots                     #
+    #  CV distance to depot i                         #
+    #  Avg CV distance to depot i                     #
+    #                                                 #
+    ###################################################
+
+    mas_cercanos = calcular_clientes_mas_cercanos(model._clients, model._depots)
+    dist_prom_to_depot = calcular_dist_prom_depot(mas_cercanos)
+    dist_min_to_depot = calcular_dist_min_depot(mas_cercanos)
+    dist_max_to_depot = calcular_dist_max_depot(mas_cercanos)
+    desv_standar_client_to_depot = calcular_std_client_distance_to_depot(mas_cercanos)
+    features[f'avg_avg_dist_to_depots'] = np.mean(dist_prom_to_depot) / max_possible_distance
+    features[f'avg_dist_min_to_depots'] = np.mean(dist_min_to_depot) / max_possible_distance
+    features[f'avg_dist_max_to_depots'] = np.mean(dist_max_to_depot) / max_possible_distance
 
     for i in range(0, len(model._depots)):
-        features[f'distance_centroid_depot_{i+1}'] = dist((model._depots[i].x, model._depots[i].y),centroid) / max_possible_distance
+        features[f'avg_dist_to_depot_{i+1}'] = dist_prom_to_depot[i] / max_possible_distance
+        features[f'cv_dist_to_depot_{i+1}'] = (desv_standar_client_to_depot[i]/dist_prom_to_depot[i])*100 / max_possible_distance
+        # features[f'dist_min_to_depot_{i+1}'] = dist_min_to_depot[i] / max_possible_distance
+        # features[f'dist_max_to_depot_{i+1}'] = dist_max_to_depot[i] / max_possible_distance
 
+    features[f'avg_cv_dist_to_depots'] = np.mean([features[f'cv_dist_to_depot_{i+1}'] for i in range(len(model._depots))])
 
-    # DC4: Average client distance to depot
-    client_distances_to_depo = [dist((client.x,client.y),depot) for client in clients]
-    features["average_distance_to_depot"] = np.mean(client_distances_to_depo) / max_possible_distance
-    features["cv_distance_to_depot"] = (np.std(client_distances_to_depo)/np.mean(client_distances_to_depo))*100 / max_possible_distance
+    ###################################################
+    #                                                 #
+    #  ND4: Distance to centroid (Interpretado como   #
+    #  Average Distance to Centroid y CV of Distance  #
+    #  to Centroid)                                   #
+    #                                                 #
+    #  Dos descriptores seleccionados:                #
+    #  Average Distance to Centroid                   #
+    #  CV of Distance to Centroid                     #
+    #                                                 #
+    ###################################################
 
-    # ND4: Distance to centroid (Interpretado como Average Distance to Centroid y CV of Distance to Centroid)
     # ND4A: Average Distance to Centroid
     distances_to_centroid = [dist(centroid,(c.x,c.y)) for c in clients]
     mean_distance_to_centroid = np.mean(distances_to_centroid)
@@ -230,20 +312,41 @@ for instance_name in instances:
     # ND4B: CV of Distance to Centroid
     features["cv_distance_to_centroid"] = (np.std(distances_to_centroid)/mean_distance_to_centroid)*100 / max_possible_distance    
 
-    # DC5: Client Demands (Aqui no está claro a que se refiere el paper, se incluyeron 2 métricas)
+    ###################################################
+    #                                                 #
+    #  DC5: Client Demands (Aqui no está claro a que  #
+    #  se refiere el paper, se incluyeron 2 métricas) #
+    #                                                 #
+    #  Dos descriptores seleccionados:                #
+    #  Ratio of Mean of Client Demands to capacity    #
+    #  Ratio of CV of Client Demands to capacity      #
+    #                                                 #
+    ###################################################
+
     # DC5B: Ratio of Mean of Client Demands to capacity
-    capacity = model._vehicle_types[0].capacity
-    all_demands = [client.delivery[0] for client in clients]
-    mean_demand = np.mean(all_demands)
+    capacity = model._vehicle_types[0].capacity # todos los vehiculos tienen la misma capacidad
+    all_demands = [client.delivery[0] for client in clients] 
+    mean_demand = np.mean(all_demands)  # promedio de todas las demandas
     features["ratio_mean_client_demand_capacity"] = mean_demand/capacity
 
     # DC5A: Ratio of CV of Client Demands to capacity
     features["ratio_cv_client_demand_capacity"] = (np.std(all_demands)/mean_demand)*100/capacity
 
-    # DC10: Average number of clients per vehicle
+    ##################################################
+    #                                                #
+    #  DC10: Average number of clients per vehicle   #
+    #  Numero de clientes / numero de vehiculos      #
+    #                                                #
+    ##################################################
     features["average_clients_per_vehicle"] = features["client_number"]/model.data().num_vehicles
 
-    #the average of the normalized nearest neighbour distances (nNNd’s)  
+
+    ##################################################
+    #                                                #
+    #  the average of the normalized nearest         #
+    #  neighbour distances (nNNd’s)                  #
+    #                                                #
+    ##################################################
     X = np.array([[client.x,client.y] for client in clients])
     nbrs = NearestNeighbors(n_neighbors=2, algorithm='ball_tree').fit(X)
     distances, indices = nbrs.kneighbors(X)
@@ -340,14 +443,14 @@ for instance_name in instances:
     features["inter_cluster_distance"] = average_inter_cluster_distance
 
     # Escritura final de features
-    f = open("_features_pXX_2.csv","a")
+    f = open("_features_pr.csv","a")
     if first_pass:
         f.write("instance")
         for feature in features.keys():
             f.write("," + feature)
         f.write("\n")
         first_pass = False
-    f.write(instance_name)
+    f.write( instance_name.split(".")[0].split("_")[1])
     for _,value in features.items():
         if isinstance(value, np.ndarray):
             rounded_value = np.round(value, 4).tolist()
@@ -357,7 +460,7 @@ for instance_name in instances:
             f.write("," + str(rounded_value))
     f.write("\n") 
     f.close()
-    break
+
 
 
 

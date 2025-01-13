@@ -123,7 +123,7 @@ plt.tight_layout()
 directorio = "EXTRA"  # Reemplaza con la ruta correcta
 
 # Buscar todos los archivos que comiencen con "solution_"
-for archivo in os.listdir():
+for archivo in os.listdir("solutions/"):
     if archivo.startswith("solution_"):
         # Extrae el nombre de la instancia
         nombre_instancia = archivo.split("_")[1].split(".")[0]

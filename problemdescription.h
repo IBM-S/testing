@@ -10,8 +10,8 @@
 
 typedef struct {
     int i; // customer number
-    int x; // x coordinate
-    int y; // y coordinate
+    float x; // x coordinate
+    float y; // y coordinate
     int d; // customer service duration
     int q; // customer demand
 } Customer;
@@ -19,8 +19,8 @@ typedef struct {
 
 typedef struct {
     int i; // depot number
-    int x; // x coordinate
-    int y; // y coordinate
+    float x; // x coordinate
+    float y; // y coordinate
     int D; // maximum route duration for vehicles from depot
     int Q; // maximum allowed load for vehicles from depot
 } Depot;
@@ -65,7 +65,8 @@ class ProblemDescription{
             for(int i = 0; i < n; i++){
                 getline(file, line);
                 ss = std::stringstream(line);
-                int ii, x, y, d, q;
+                int ii, d, q;
+                float x, y;
                 ss >> ii >> x >> y >> d >> q;
                 customers[i] = {i, x, y, d, q};
             }
@@ -73,7 +74,8 @@ class ProblemDescription{
             for(int i = 0; i < t; i++){
                 getline(file, line);
                 ss = std::stringstream(line);
-                int ii, x, y;
+                int ii;
+                float x, y;
                 ss >> ii >> x >> y;
                 depots[i].x = x;
                 depots[i].y = y;
