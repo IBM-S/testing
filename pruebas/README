@@ -27,3 +27,4 @@ ver_cap.py
 Calcula la demanda total, la demanda minima, demanda maxima, promedio de demanda y desviacion de la demanda. En la siguiente linea se puede modificar para poder especificar el tipo de instancia:
 if archivo.startswith("Golden_"):
 
+_features_CMT
