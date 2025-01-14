@@ -99,8 +99,8 @@ screen=salida
 
 rm -rf ${screen}
 
-echo "./GA ${dirInstances}/${instance} ${seed} ${params} > ${screen}"
-./GA Instances/${instance} ${seed} ${params} > ${screen}
+echo "../GA ${dirInstances}/${instance} ${seed} ${params} > ${screen}"
+../GA Instances/${instance} ${seed} ${params} > ${screen}
 
 quality=`tail -2 ${screen} |head -1 |awk -F ' = ' '{print $2}'`
 

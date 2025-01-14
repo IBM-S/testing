@@ -1,0 +1,6 @@
+Final best parameter configuration: alpha=10, beta=0.05, bound=1.5, crossoverRate=0.6, elitism=0.1, interAttemptRate=2, interMutationRate=1.0, intraMutationRate=0.2, populationSize=200, probBestIndividual=0.8, probReversal=0.25, probSingle=1.0
+==================================================================
+Active parameters: alpha=10, beta=0.05, bound=1.5, crossoverRate=0.6, elitism=0.1, interAttemptRate=2, interMutationRate=1.0, intraMutationRate=0.2, populationSize=200, probBestIndividual=0.8, probReversal=0.25, probSingle=1.0
+==================================================================
+Training quality of this final best found parameter configuration: 4097.325892857143, based on 448 runs with cutoff 1000000000.0
+Test quality of this final best found parameter configuration: 1000000000000000000, based on 0 independent runs with cutoff 1000000000.0

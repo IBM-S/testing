@@ -1,0 +1,69 @@
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 100 -beta 0.001 -bound 2.0 -crossoverRate 0.6 -elitism 0.01 -interAttemptRate 10 -interMutationRate 0.25 -intraMutationRate 0.2 -populationSize 400 -probBestIndividual 0.8 -probReversal 0.33 -probSingle 0.33 > /tmp/tmp-2025-01-0809:20:14-0.11486339569091797
+Result for ParamILS: SAT, 0, 1326.85, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 100 -beta 0.01 -bound 1.5 -crossoverRate 0.1 -elitism 0.05 -interAttemptRate 1 -interMutationRate 0.1 -intraMutationRate 1.0 -populationSize 50 -probBestIndividual 0.8 -probReversal 0.50 -probSingle 1.0 > /tmp/tmp-2025-01-0809:20:17-0.4118499755859375
+Result for ParamILS: SAT, 0, 1318.95, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 100 -beta 1.0 -bound 2.5 -crossoverRate 0.2 -elitism 0.20 -interAttemptRate 1 -interMutationRate 0.2 -intraMutationRate 0.1 -populationSize 100 -probBestIndividual 1.0 -probReversal 0.50 -probSingle 0.0 > /tmp/tmp-2025-01-0809:20:18-0.09449291229248047
+Result for ParamILS: SAT, 0, 1374.04, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 150 -beta 0.001 -bound 2.0 -crossoverRate 0.5 -elitism 0.20 -interAttemptRate 20 -interMutationRate 0.75 -intraMutationRate 0.25 -populationSize 100 -probBestIndividual 0.6 -probReversal 0.0 -probSingle 0.0 > /tmp/tmp-2025-01-0809:20:19-0.5301494598388672
+Result for ParamILS: SAT, 0, 1326.85, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 50 -beta 10.0 -bound 0.5 -crossoverRate 0.5 -elitism 0.1 -interAttemptRate 5 -interMutationRate 0.75 -intraMutationRate 0.2 -populationSize 1000 -probBestIndividual 0.9 -probReversal 0.75 -probSingle 0.50 > /tmp/tmp-2025-01-0809:20:21-0.05062246322631836
+Result for ParamILS: SAT, 0, 1365.69, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 10 -beta 0.001 -bound 0.5 -crossoverRate 0.1 -elitism 0.01 -interAttemptRate 2 -interMutationRate 0.2 -intraMutationRate 0.2 -populationSize 100 -probBestIndividual 0.6 -probReversal 1.0 -probSingle 0.75 > /tmp/tmp-2025-01-0809:20:23-0.03696846961975098
+Result for ParamILS: SAT, 0, 1365.69, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 200 -beta 1.0 -bound 2.5 -crossoverRate 0.3 -elitism 0.01 -interAttemptRate 10 -interMutationRate 0.25 -intraMutationRate 0.25 -populationSize 500 -probBestIndividual 0.6 -probReversal 0.75 -probSingle 1.0 > /tmp/tmp-2025-01-0809:20:24-0.08978414535522461
+Result for ParamILS: SAT, 0, 1332.17, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 200 -beta 10.0 -bound 1.5 -crossoverRate 1.0 -elitism 0.01 -interAttemptRate 1 -interMutationRate 0.75 -intraMutationRate 0.75 -populationSize 500 -probBestIndividual 0.8 -probReversal 0.33 -probSingle 1.0 > /tmp/tmp-2025-01-0809:20:26-0.4583399295806885
+Result for ParamILS: SAT, 0, 1326.85, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 10 -beta 1.0 -bound 0.5 -crossoverRate 1.0 -elitism 0.1 -interAttemptRate 2 -interMutationRate 1.0 -intraMutationRate 1.0 -populationSize 500 -probBestIndividual 0.9 -probReversal 0.25 -probSingle 0.0 > /tmp/tmp-2025-01-0809:20:30-0.19642996788024902
+Result for ParamILS: SAT, 0, 1365.69, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 50 -beta 0.5 -bound 4.0 -crossoverRate 1.0 -elitism 0.20 -interAttemptRate 10 -interMutationRate 0.75 -intraMutationRate 1.0 -populationSize 50 -probBestIndividual 0.6 -probReversal 1.0 -probSingle 0.0 > /tmp/tmp-2025-01-0809:20:34-0.7792332172393799
+Result for ParamILS: SAT, 0, 1342.39, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 200 -beta 0.001 -bound 3.0 -crossoverRate 0.5 -elitism 0.1 -interAttemptRate 5 -interMutationRate 0.2 -intraMutationRate 0.75 -populationSize 50 -probBestIndividual 0.8 -probReversal 0.25 -probSingle 0.0 > /tmp/tmp-2025-01-0809:20:38-0.4279625415802002
+Result for ParamILS: SAT, 0, 1326.85, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 100 -beta 0.01 -bound 1.5 -crossoverRate 0.1 -elitism 0.05 -interAttemptRate 1 -interMutationRate 0.1 -intraMutationRate 1.0 -populationSize 50 -probBestIndividual 0.8 -probReversal 0.50 -probSingle 0.50 > /tmp/tmp-2025-01-0809:20:41-0.05108070373535156
+Result for ParamILS: SAT, 0, 1318.95, 0, 137411545
+
+bash GA.sh p18.dat "" 1000000000.0000001 2147483647 281321000 -alpha 100 -beta 0.01 -bound 1.5 -crossoverRate 0.1 -elitism 0.05 -interAttemptRate 1 -interMutationRate 0.1 -intraMutationRate 1.0 -populationSize 50 -probBestIndividual 0.8 -probReversal 0.50 -probSingle 1.0 > /tmp/tmp-2025-01-0809:20:42-0.12738299369812012
+Result for ParamILS: SAT, 0, 4311.46, 0, 281321000
+
+bash GA.sh p18.dat "" 1000000000.0000001 2147483647 281321000 -alpha 100 -beta 0.01 -bound 1.5 -crossoverRate 0.1 -elitism 0.05 -interAttemptRate 1 -interMutationRate 0.1 -intraMutationRate 1.0 -populationSize 50 -probBestIndividual 0.8 -probReversal 0.50 -probSingle 0.50 > /tmp/tmp-2025-01-0809:20:44-0.45467305183410645
+Result for ParamILS: SAT, 0, 4311.46, 0, 281321000
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 100 -beta 0.01 -bound 1.5 -crossoverRate 0.1 -elitism 0.05 -interAttemptRate 1 -interMutationRate 0.1 -intraMutationRate 1.0 -populationSize 1000 -probBestIndividual 0.8 -probReversal 0.50 -probSingle 0.50 > /tmp/tmp-2025-01-0809:20:47-0.933413028717041
+Result for ParamILS: SAT, 0, 1382.04, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 100 -beta 0.01 -bound 1.5 -crossoverRate 0.5 -elitism 0.05 -interAttemptRate 1 -interMutationRate 0.1 -intraMutationRate 1.0 -populationSize 50 -probBestIndividual 0.8 -probReversal 0.50 -probSingle 0.50 > /tmp/tmp-2025-01-0809:20:49-0.5920867919921875
+Result for ParamILS: SAT, 0, 1326.85, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 100 -beta 0.01 -bound 1.5 -crossoverRate 0.6 -elitism 0.05 -interAttemptRate 1 -interMutationRate 0.1 -intraMutationRate 1.0 -populationSize 50 -probBestIndividual 0.8 -probReversal 0.50 -probSingle 0.50 > /tmp/tmp-2025-01-0809:20:51-0.8534848690032959
+Result for ParamILS: SAT, 0, 1326.85, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 100 -beta 0.01 -bound 1.5 -crossoverRate 0.3 -elitism 0.05 -interAttemptRate 1 -interMutationRate 0.1 -intraMutationRate 1.0 -populationSize 50 -probBestIndividual 0.8 -probReversal 0.50 -probSingle 0.50 > /tmp/tmp-2025-01-0809:20:54-0.5472218990325928
+Result for ParamILS: SAT, 0, 1329.31, 0, 137411545
+
+bash GA.sh p12.dat "" 1000000000.0000001 2147483647 137411545 -alpha 100 -beta 0.05 -bound 1.5 -crossoverRate 0.1 -elitism 0.05 -interAttemptRate 1 -interMutationRate 0.1 -intraMutationRate 1.0 -populationSize 50 -probBestIndividual 0.8 -probReversal 0.50 -probSingle 0.50 > /tmp/tmp-2025-01-0809:20:56-0.9316179752349854
+Result for ParamILS: SAT, 0, 1318.95, 0, 137411545
+
+bash GA.sh p18.dat "" 1000000000.0000001 2147483647 281321000 -alpha 100 -beta 0.05 -bound 1.5 -crossoverRate 0.1 -elitism 0.05 -interAttemptRate 1 -interMutationRate 0.1 -intraMutationRate 1.0 -populationSize 50 -probBestIndividual 0.8 -probReversal 0.50 -probSingle 0.50 > /tmp/tmp-2025-01-0809:20:58-0.4614887237548828
+Result for ParamILS: SAT, 0, 4311.46, 0, 281321000
+
+bash GA.sh p06.dat "" 1000000000.0000001 2147483647 1106994022 -alpha 100 -beta 0.01 -bound 1.5 -crossoverRate 0.1 -elitism 0.05 -interAttemptRate 1 -interMutationRate 0.1 -intraMutationRate 1.0 -populationSize 50 -probBestIndividual 0.8 -probReversal 0.50 -probSingle 1.0 > /tmp/tmp-2025-01-0809:21:00-0.677863359451294
+Result for ParamILS: SAT, 0, 940.136, 0, 1106994022
+
+bash GA.sh p06.dat "" 1000000000.0000001 2147483647 1106994022 -alpha 100 -beta 0.05 -bound 1.5 -crossoverRate 0.1 -elitism 0.05 -interAttemptRate 1 -interMutationRate 0.1 -intraMutationRate 1.0 -populationSize 50 -probBestIndividual 0.8 -probReversal 0.50 -probSingle 0.50 > /tmp/tmp-2025-01-0809:21:02-0.0707855224609375
+Result for ParamILS: SAT, 0, 948.352, 0, 1106994022
+
+bash GA.sh p23.dat "" 1000000000.0000001 2147483647 609857775 -alpha 100 -beta 0.01 -bound 1.5 -crossoverRate 0.1 -elitism 0.05 -interAttemptRate 1 -interMutationRate 0.1 -intraMutationRate 1.0 -populationSize 50 -probBestIndividual 0.8 -probReversal 0.50 -probSingle 1.0 > /tmp/tmp-2025-01-0809:21:03-0.03883218765258789
+Result for ParamILS: SAT, 0, 6624.24, 0, 609857775
+
