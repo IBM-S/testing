@@ -184,23 +184,36 @@ def calcular_std_client_distance_to_depot(distancias):
     return desv_standard_depot
 
 
+base_dir = "features_inst"
+os.makedirs(base_dir, exist_ok=True)
 
 features = dict()
 #Leemos instancia y generamos modelo
 directory = args.dir
 instances = os.listdir(directory)
-instances = [i for i in instances if ("pr") in i]
+instances = [i for i in instances if not ("__") in i]
 first_pass = True
-for instance_name in instances:
+
+
+leer_Data = []
+for i in instances:
+    instance = p.read(directory + i, round_func="round")
+    leer_Data.append(instance)
+
+#print(leer_Data)
+#print(instances)
+contador = 0
+for instance_name in leer_Data:
+    features.clear()
+    print("Extracting features for: " + instances[contador] + "   Path: " + directory + instances[contador])
     
-    print("Extracting features for: " + instance_name + "   Path: " + directory + instance_name)
-    instance = p.read(directory + instance_name, round_func="round")
-    model = p.Model.from_data(instance)
+    #instance = p.read(directory + instance_name, round_func="round")
+    model = p.Model.from_data(instance_name)
     
     #print(dir(model))
     #Debug
-    cliente_codificados = getattr(model, "_clients")
-    contador = 0
+    #cliente_codificados = getattr(model, "_clients")
+    #contador = 0
     # Iterar sobre los clientes e inspeccionar atributos
     """ for i, client in enumerate(cliente_codificados):
         contador +=1
@@ -239,6 +252,9 @@ for instance_name in instances:
 
     #Centroid of the nodes
     centroid = model.data().centroid()
+
+    num_depots = len(model._depots)
+    features["n_depots"] = num_depots
 
     ###################################################
     #                                                 #
@@ -287,9 +303,13 @@ for instance_name in instances:
 
     for i in range(0, len(model._depots)):
         features[f'avg_dist_to_depot_{i+1}'] = dist_prom_to_depot[i] / max_possible_distance
-        features[f'cv_dist_to_depot_{i+1}'] = (desv_standar_client_to_depot[i]/dist_prom_to_depot[i])*100 / max_possible_distance
+        # features[f'cv_dist_to_depot_{i+1}'] = (desv_standar_client_to_depot[i]/dist_prom_to_depot[i])*100 / max_possible_distance
         # features[f'dist_min_to_depot_{i+1}'] = dist_min_to_depot[i] / max_possible_distance
         # features[f'dist_max_to_depot_{i+1}'] = dist_max_to_depot[i] / max_possible_distance
+
+    for i in range(0, len(model._depots)):
+        features[f'cv_dist_to_depot_{i+1}'] = (desv_standar_client_to_depot[i]/dist_prom_to_depot[i])*100 / max_possible_distance
+
 
     features[f'avg_cv_dist_to_depots'] = np.mean([features[f'cv_dist_to_depot_{i+1}'] for i in range(len(model._depots))])
 
@@ -324,11 +344,11 @@ for instance_name in instances:
     ###################################################
 
     # DC5B: Ratio of Mean of Client Demands to capacity
-    capacity = model._vehicle_types[0].capacity # todos los vehiculos tienen la misma capacidad
+    capacity = model._vehicle_types[0].capacity[0] # todos los vehiculos tienen la misma capacidad
     all_demands = [client.delivery[0] for client in clients] 
     mean_demand = np.mean(all_demands)  # promedio de todas las demandas
     features["ratio_mean_client_demand_capacity"] = mean_demand/capacity
-
+    
     # DC5A: Ratio of CV of Client Demands to capacity
     features["ratio_cv_client_demand_capacity"] = (np.std(all_demands)/mean_demand)*100/capacity
 
@@ -443,23 +463,30 @@ for instance_name in instances:
     features["inter_cluster_distance"] = average_inter_cluster_distance
 
     # Escritura final de features
-    f = open("_features_pr.csv","a")
-    if first_pass:
-        f.write("instance")
-        for feature in features.keys():
-            f.write("," + feature)
+    csv_file = os.path.join(base_dir, f"features_{num_depots}_depots.csv")
+
+    write_header = not os.path.exists(csv_file)  # Escribir encabezado solo si el archivo no existe
+
+    with open(csv_file, "a") as f:
+        # Escribir encabezado si es la primera vez
+        if write_header:
+            f.write("instance")
+            for feature in features.keys():
+                f.write("," + feature)
+            f.write("\n")
+        
+        # Escribir fila de datos
+        f.write(instances[contador].split(".")[0].split("_")[1])  # Usar nombre de instancia
+        for _, value in features.items():
+            if isinstance(value, np.ndarray):
+                rounded_value = np.round(value, 4).tolist()
+                f.write("," + str(rounded_value))
+            else:
+                rounded_value = round(value, 4)
+                f.write("," + str(rounded_value))
         f.write("\n")
-        first_pass = False
-    f.write( instance_name.split(".")[0].split("_")[1])
-    for _,value in features.items():
-        if isinstance(value, np.ndarray):
-            rounded_value = np.round(value, 4).tolist()
-            f.write("," + str(rounded_value))
-        else:
-            rounded_value = round(value,4)
-            f.write("," + str(rounded_value))
-    f.write("\n") 
-    f.close()
+        f.close()
+        contador+=1
 
 
 
