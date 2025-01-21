@@ -13,13 +13,13 @@ def leer_archivo_result(ruta_completa):
     """
     try:
         with open(ruta_completa, 'r') as f:
+            for i in range(4):
+                f.readline()
             contenido = f.readline().strip().split(" ")
-            parametros = contenido[4:]  # Asume que los parámetros comienzan desde la posición 4
+            parametros = contenido[9].split(",")[0]  # Asume que los parámetros comienzan desde la posición 4
             configuracion = {}
-            for param in parametros:
-                param = param.replace(",", "")
-                clave, valor = param.split("=")
-                configuracion[clave] = valor
+            configuracion["FO"] = parametros
+                
             return configuracion
     except Exception as e:
         print(f"Error leyendo el archivo {ruta_completa}: {e}")
@@ -74,6 +74,6 @@ ruta_principal = "ParamILS_ALL_vunmillon_S0"
 df_resultados = procesar_resultados(ruta_principal)
 
 # Guardar el DataFrame en un archivo CSV
-df_resultados.to_csv('resultados_parametros.csv', index=False)
+df_resultados.to_csv('resultados_parametros_2.csv', index=False)
 
 print("Archivo CSV generado: resultados_parametros.csv")
