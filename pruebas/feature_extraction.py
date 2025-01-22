@@ -7,7 +7,7 @@ import argparse
 import os
 from sklearn.neighbors import NearestNeighbors
 from sklearn.cluster import OPTICS
-
+import re
 import vrplib
 
 
@@ -112,210 +112,207 @@ def clusteringQuality(clients, labels):
     return quality
     
 
+base_dir = "features_inst"
+os.makedirs(base_dir, exist_ok=True)
+
 features = dict()
-
-
-instance = vrplib.read_instance("../Instances/CVRP/X-n101-k25.vrp")
-#print(instance)
-
-print(instance.keys())
-
-#Leemos instancia y generamos modelo
 directory = args.dir
 instances = os.listdir(directory)
-instances = [i for i in instances if (".vrp" and "Golden") in i]
-first_pass = True
-for instance_name in instances:
-    print("Extracting features for: " + instance_name + "   Path: " + directory + instance_name)
-    instance = p.read(directory + instance_name, round_func="round")
-    model = p.Model.from_data(instance)
+expresion_CMT = r"CMT\d+\.vrp"
+expresion_Golden = r"Golden_\d+\.vrp"
+expresion_X = r"X-n\d+\-k\d+\.vrp"
 
+lista_expresiones = [expresion_CMT, expresion_Golden, expresion_X]
+nombres = ["CMT", "Golden", "X-nA-kB"]
 
-    #Debug
-    """ cliente_codificados = getattr(model, "_clients")
+for num, expresion in enumerate(lista_expresiones):
+    filtered_instances = [i for i in instances if re.findall(expresion, i)]
+    first_pass = True
+    leer_Data = []
+    for i in filtered_instances:
+        instance = p.read(directory + i, round_func="round")
+        leer_Data.append(instance)
     contador = 0
-    # Iterar sobre los clientes e inspeccionar atributos
-    for i, client in enumerate(cliente_codificados):
-        contador +=1
-        print(f"\nCliente {i+1}:")
-        for attr in dir(client):  # Lista todos los atributos y métodos del cliente
-            if not attr.startswith("_"):  # Ignorar atributos o métodos privados
-                try:
-                    value = getattr(client, attr)  # Obtén el valor del atributo
-                    print(f"  {attr}: {value}")
-                except AttributeError as e:
-                    print(f"  No se pudo obtener {attr}: {e}")
-        demand = getattr(client, 'delivery')
-        print(f"x: {getattr(client, 'x')}, y: {getattr(client, 'y')}, demand: {demand[0]}")
-        if contador == 1:
-            break """
-    
-    #Construimos matriz de distancias (pyvrp ya trabaja con una interna pero no es facilmente accesible)
-    clients = model._clients
-    distance_matrix = [[] for client in clients]
-    for i,client in enumerate(clients):
-        for j,_client in enumerate(clients):
-            distance_matrix[i].append(client_dist(client, _client))
-    
-    #Obtenemos distancia diagonal de la boundbox para normalizar todas las features espaciales
-    max_x_value = max([client.x for client in clients])
-    max_y_value = max([client.y for client in clients])
-    max_possible_distance = np.sqrt(max_x_value**2 + max_y_value**2)
 
-    # DC1: Number of clients
-    features["client_number"] = float(len(clients))
-
-    #Depot Location (siempre hay 1 en las instancias)
-    depot = (model._depots[0].x, model._depots[0].y)
-
-    #Centroid of the nodes
-    centroid = model.data().centroid()
-
-    # DC3: Distance between centroid and depot
-    features["distance_centroid_depot"] = dist(depot,centroid) / max_possible_distance
-
-    # DC4: Average client distance to depot
-    client_distances_to_depo = [dist((client.x,client.y),depot) for client in clients]
-    features["average_distance_to_depot"] = np.mean(client_distances_to_depo) / max_possible_distance
-    features["cv_distance_to_depot"] = (np.std(client_distances_to_depo)/np.mean(client_distances_to_depo))*100 / max_possible_distance
-
-    # ND4: Distance to centroid (Interpretado como Average Distance to Centroid y CV of Distance to Centroid)
-    # ND4A: Average Distance to Centroid
-    distances_to_centroid = [dist(centroid,(c.x,c.y)) for c in clients]
-    mean_distance_to_centroid = np.mean(distances_to_centroid)
-    features["average_distance_to_centroid"] = mean_distance_to_centroid / max_possible_distance
-    # ND4B: CV of Distance to Centroid
-    features["cv_distance_to_centroid"] = (np.std(distances_to_centroid)/mean_distance_to_centroid)*100 / max_possible_distance    
-
-    # DC5: Client Demands (Aqui no está claro a que se refiere el paper, se incluyeron 2 métricas)
-    # DC5B: Ratio of Mean of Client Demands to capacity
-    capacity = model._vehicle_types[0].capacity
-    all_demands = [client.delivery[0] for client in clients]
-    mean_demand = np.mean(all_demands)
-    features["ratio_mean_client_demand_capacity"] = mean_demand/capacity
-
-    # DC5A: Ratio of CV of Client Demands to capacity
-    features["ratio_cv_client_demand_capacity"] = (np.std(all_demands)/mean_demand)*100/capacity
-
-    # DC10: Average number of clients per vehicle
-    features["average_clients_per_vehicle"] = features["client_number"]/model.data().num_vehicles
-
-    #the average of the normalized nearest neighbour distances (nNNd’s)  
-    X = np.array([[client.x,client.y] for client in clients])
-    nbrs = NearestNeighbors(n_neighbors=2, algorithm='ball_tree').fit(X)
-    distances, indices = nbrs.kneighbors(X)
-    distances = np.array([d[1] for d in distances])
-    mean_distance =  np.mean(distances)
-    features["avg_NN_distances"] = mean_distance / max_possible_distance
-    #the cv of the normalized nearest neighbour distances (nNNd’s)
-    features["cv_NN_distances"] = (np.std(distances)/mean_distance) / max_possible_distance    
-
-
-    # No sirve en este caso
-    # Extra: Features de Time Windows
-    # time_window_features = get_time_window_features(clients)
-    # features["tw_ratio_max_overlaps_to_total"] = time_window_features["max_overlaps"]
-    # features["tw_ratio_avg_overlaps_to_total"] = time_window_features["avg_overlaps"]
-    # features["tw_ratio_avg_window_length_to_longest"] = time_window_features["avg_window_length"]
-    # features["tw_ratio_cv_window_length_to_longest"] = time_window_features["cv_window_length"]
-
-    #CLUSTERING FEATURES
-    #Iteramos sobre valores de min_samples y usamos el clustering de mayor calidad.
-    best_quality = -10000
-    best_min_samples = 0
-    for min_samples in range(2,50):
-        clustering = OPTICS(min_samples=min_samples).fit(X)
-        quality = clusteringQuality(clients,clustering.labels_)
-        if (quality > best_quality):
-            best_quality = quality
-            best_clustering = clustering
-            best_min_samples = min_samples
-            
-    # CLS1 - Optimal min_samples value
-    features["optimal_min_samples"] = best_min_samples
-    # CLS1 - the cluster ratio (the ratio of the number of clusters to the number of clients with clusters generated using the GDBSCAN algorithm [29])
-    cluster_amount = len(set(best_clustering.labels_))
-    features["cluster_ratio"] = cluster_amount / len(clients)
-    
-    # CLS2 - the outlier ratio (ratio of number of outliers to clients)
-    outlier_amount = len([label for label in best_clustering.labels_ if label == -1])
-    features["outlier_ratio"] = outlier_amount / len(clients)
-
-    # CLS3 - the average of the number of clients per cluster relative to total client amount
-    clients_per_cluster = dict()
-    for label in best_clustering.labels_:
-        if label not in clients_per_cluster.keys():
-            clients_per_cluster[label] = 0
-        clients_per_cluster[label] += 1
-    mean_clients_per_cluster = np.mean(list(clients_per_cluster.values()))
-    features["avg_clients_per_cluster"] = mean_clients_per_cluster / len(clients)
-
-    # CLS4 - the CV to the number of clients per cluster relative to total client amount
-    features["cv_clients_per_cluster"] = (np.std(list(clients_per_cluster.values()))/mean_clients_per_cluster) / len(clients)
-
-    # CLS5 - cluster density (normalized intra cluster distance)
-    # CLS6 - cluster spread (normalized distance to nearest cluster)
-    # Este es un bloque enorme de codigo sacado de la funcion clusteringQuality.
-    client_clusters = dict()
-    for i in range(len(clients)):
-        if best_clustering.labels_[i] not in client_clusters.keys():
-            client_clusters[best_clustering.labels_[i]] = []
-        client_clusters[best_clustering.labels_[i]].append(clients[i])
-
-    #Obtenemos centroides
-    centroids = dict()
-    for label, cluster in client_clusters.items():
-        centroid = np.array([0,0])
-        for client in cluster:
-            centroid += np.array([client.x,client.y])
-        centroid = np.divide(centroid,len(cluster))
-        centroids[label] = centroid
-
-    intra_cluster_distances = dict()
-    for label,cluster in client_clusters.items():
-        distance_to_centroid = 0
-        for client in cluster:
-            distance_to_centroid += np.sqrt((client.x - centroids[label][0])**2 + (client.y - centroids[label][1])**2)
-        distance_to_centroid /= len(cluster)
+    for instance_name in leer_Data:
+        features.clear()
         
-        intra_cluster_distances[label] = distance_to_centroid
-    average_intra_cluster_distance = np.mean(list(intra_cluster_distances.values()))
+        print("Extracting features for: " + filtered_instances[contador] + "   Path: " + directory + filtered_instances[contador])
+        
+        #instance = p.read(directory + instance_name, round_func="round")
+        model = p.Model.from_data(instance_name)
+        
+        #Construimos matriz de distancias (pyvrp ya trabaja con una interna pero no es facilmente accesible)
+        clients = model._clients
+        distance_matrix = [[] for client in clients]
+        for i,client in enumerate(clients):
+            for j,_client in enumerate(clients):
+                distance_matrix[i].append(client_dist(client, _client))
+        
+        #Obtenemos distancia diagonal de la boundbox para normalizar todas las features espaciales
+        max_x_value = max([client.x for client in clients])
+        max_y_value = max([client.y for client in clients])
+        max_possible_distance = np.sqrt(max_x_value**2 + max_y_value**2)
 
-    #Obtenemos distancia de cada cluster al cluster vecino más cercano
-    centroid_locations = list(centroids.values())
-    if len(centroid_locations) > 1:
-        neighbors = NearestNeighbors(n_neighbors=2, algorithm='auto').fit(centroid_locations)
-        distances, indices = neighbors.kneighbors(centroid_locations)
-        average_inter_cluster_distance = np.mean(distances)
-    else:
-        average_inter_cluster_distance = 0
+        # DC1: Number of clients
+        features["client_number"] = float(len(clients))
 
-    average_intra_cluster_distance /= max_possible_distance
-    average_inter_cluster_distance /= max_possible_distance
-    #Finalmente registramos las features CLS5 y CLS6
-    features["intra_cluster_distance"] = average_intra_cluster_distance
-    features["inter_cluster_distance"] = average_inter_cluster_distance
+        #Depot Location (siempre hay 1 en las instancias)
+        depot = (model._depots[0].x, model._depots[0].y)
 
-    break
+        #Centroid of the nodes
+        centroid = model.data().centroid()
 
-    # Escritura final de features
-    f = open("_features.csv","a")
-    if first_pass:
-        f.write("instance")
-        for feature in features.keys():
-            f.write("," + feature)
-        f.write("\n")
-        first_pass = False
-    f.write(instance_name)
-    for _,value in features.items():
-        if isinstance(value, np.ndarray):
-            rounded_value = np.round(value, 4).tolist()
-            f.write("," + str(rounded_value))
+        # DC3: Distance between centroid and depot
+        features["distance_centroid_depot"] = dist(depot,centroid) / max_possible_distance
+
+        # DC4: Average client distance to depot
+        client_distances_to_depo = [dist((client.x,client.y),depot) for client in clients]
+        features["average_distance_to_depot"] = np.mean(client_distances_to_depo) / max_possible_distance
+        features["cv_distance_to_depot"] = (np.std(client_distances_to_depo)/np.mean(client_distances_to_depo))*100 / max_possible_distance
+
+        # ND4: Distance to centroid (Interpretado como Average Distance to Centroid y CV of Distance to Centroid)
+        # ND4A: Average Distance to Centroid
+        distances_to_centroid = [dist(centroid,(c.x,c.y)) for c in clients]
+        mean_distance_to_centroid = np.mean(distances_to_centroid)
+        features["average_distance_to_centroid"] = mean_distance_to_centroid / max_possible_distance
+        # ND4B: CV of Distance to Centroid
+        features["cv_distance_to_centroid"] = (np.std(distances_to_centroid)/mean_distance_to_centroid)*100 / max_possible_distance    
+
+        # DC5: Client Demands (Aqui no está claro a que se refiere el paper, se incluyeron 2 métricas)
+        # DC5B: Ratio of Mean of Client Demands to capacity
+        capacity = model._vehicle_types[0].capacity[0]
+        all_demands = [client.delivery[0] for client in clients]
+        mean_demand = np.mean(all_demands)
+        features["ratio_mean_client_demand_capacity"] = mean_demand/capacity
+
+        # DC5A: Ratio of CV of Client Demands to capacity
+        features["ratio_cv_client_demand_capacity"] = (np.std(all_demands)/mean_demand)*100/capacity
+
+        # DC10: Average number of clients per vehicle
+        features["average_clients_per_vehicle"] = features["client_number"]/model.data().num_vehicles
+
+        #the average of the normalized nearest neighbour distances (nNNd’s)  
+        X = np.array([[client.x,client.y] for client in clients])
+        nbrs = NearestNeighbors(n_neighbors=2, algorithm='ball_tree').fit(X)
+        distances, indices = nbrs.kneighbors(X)
+        distances = np.array([d[1] for d in distances])
+        mean_distance =  np.mean(distances)
+        features["avg_NN_distances"] = mean_distance / max_possible_distance
+        #the cv of the normalized nearest neighbour distances (nNNd’s)
+        features["cv_NN_distances"] = (np.std(distances)/mean_distance) / max_possible_distance    
+
+
+        # No sirve en este caso
+        # Extra: Features de Time Windows
+        # time_window_features = get_time_window_features(clients)
+        # features["tw_ratio_max_overlaps_to_total"] = time_window_features["max_overlaps"]
+        # features["tw_ratio_avg_overlaps_to_total"] = time_window_features["avg_overlaps"]
+        # features["tw_ratio_avg_window_length_to_longest"] = time_window_features["avg_window_length"]
+        # features["tw_ratio_cv_window_length_to_longest"] = time_window_features["cv_window_length"]
+
+        #CLUSTERING FEATURES
+        #Iteramos sobre valores de min_samples y usamos el clustering de mayor calidad.
+        best_quality = -10000
+        best_min_samples = 0
+        for min_samples in range(2,50):
+            clustering = OPTICS(min_samples=min_samples).fit(X)
+            quality = clusteringQuality(clients,clustering.labels_)
+            if (quality > best_quality):
+                best_quality = quality
+                best_clustering = clustering
+                best_min_samples = min_samples
+                
+        # CLS1 - Optimal min_samples value
+        features["optimal_min_samples"] = best_min_samples
+        # CLS1 - the cluster ratio (the ratio of the number of clusters to the number of clients with clusters generated using the GDBSCAN algorithm [29])
+        cluster_amount = len(set(best_clustering.labels_))
+        features["cluster_ratio"] = cluster_amount / len(clients)
+        
+        # CLS2 - the outlier ratio (ratio of number of outliers to clients)
+        outlier_amount = len([label for label in best_clustering.labels_ if label == -1])
+        features["outlier_ratio"] = outlier_amount / len(clients)
+
+        # CLS3 - the average of the number of clients per cluster relative to total client amount
+        clients_per_cluster = dict()
+        for label in best_clustering.labels_:
+            if label not in clients_per_cluster.keys():
+                clients_per_cluster[label] = 0
+            clients_per_cluster[label] += 1
+        mean_clients_per_cluster = np.mean(list(clients_per_cluster.values()))
+        features["avg_clients_per_cluster"] = mean_clients_per_cluster / len(clients)
+
+        # CLS4 - the CV to the number of clients per cluster relative to total client amount
+        features["cv_clients_per_cluster"] = (np.std(list(clients_per_cluster.values()))/mean_clients_per_cluster) / len(clients)
+
+        # CLS5 - cluster density (normalized intra cluster distance)
+        # CLS6 - cluster spread (normalized distance to nearest cluster)
+        # Este es un bloque enorme de codigo sacado de la funcion clusteringQuality.
+        client_clusters = dict()
+        for i in range(len(clients)):
+            if best_clustering.labels_[i] not in client_clusters.keys():
+                client_clusters[best_clustering.labels_[i]] = []
+            client_clusters[best_clustering.labels_[i]].append(clients[i])
+
+        #Obtenemos centroides
+        centroids = dict()
+        for label, cluster in client_clusters.items():
+            centroid = np.array([0,0])
+            for client in cluster:
+                centroid += np.array([client.x,client.y])
+            centroid = np.divide(centroid,len(cluster))
+            centroids[label] = centroid
+
+        intra_cluster_distances = dict()
+        for label,cluster in client_clusters.items():
+            distance_to_centroid = 0
+            for client in cluster:
+                distance_to_centroid += np.sqrt((client.x - centroids[label][0])**2 + (client.y - centroids[label][1])**2)
+            distance_to_centroid /= len(cluster)
+            
+            intra_cluster_distances[label] = distance_to_centroid
+        average_intra_cluster_distance = np.mean(list(intra_cluster_distances.values()))
+
+        #Obtenemos distancia de cada cluster al cluster vecino más cercano
+        centroid_locations = list(centroids.values())
+        if len(centroid_locations) > 1:
+            neighbors = NearestNeighbors(n_neighbors=2, algorithm='auto').fit(centroid_locations)
+            distances, indices = neighbors.kneighbors(centroid_locations)
+            average_inter_cluster_distance = np.mean(distances)
         else:
-            rounded_value = round(value,4)
-            f.write("," + str(rounded_value))
-    f.write("\n") 
-    f.close()
+            average_inter_cluster_distance = 0
+
+        average_intra_cluster_distance /= max_possible_distance
+        average_inter_cluster_distance /= max_possible_distance
+        #Finalmente registramos las features CLS5 y CLS6
+        features["intra_cluster_distance"] = average_intra_cluster_distance
+        features["inter_cluster_distance"] = average_inter_cluster_distance
+
+        # Escritura final de features
+        csv_file = os.path.join(base_dir, f"features_{nombres[num]}.csv")
+
+        write_header = not os.path.exists(csv_file)  # Escribir encabezado solo si el archivo no existe
+
+        with open(csv_file, "a") as f:
+            # Escribir encabezado si es la primera vez
+            if write_header:
+                f.write("instance")
+                for feature in features.keys():
+                    f.write("," + feature)
+                f.write("\n")
+            
+            # Escribir fila de datos
+            f.write(filtered_instances[contador].split(".")[0])  # Usar nombre de instancia
+            for _, value in features.items():
+                if isinstance(value, np.ndarray):
+                    rounded_value = np.round(value, 4).tolist()
+                    f.write("," + str(rounded_value))
+                else:
+                    rounded_value = round(value, 4)
+                    f.write("," + str(rounded_value))
+            f.write("\n")
+            f.close()
+            contador+=1
 
 
 
