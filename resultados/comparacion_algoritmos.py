@@ -26,21 +26,35 @@ def calcular_metricas(ruta_logs):
                 with open(ruta_completa, 'r') as f:
                     lineas = f.readlines()
                     if lineas:
-                        valor = float(lineas[-1].strip())  # Asume que el resultado está en la última línea
+                        # Extraer factibilidad de la primera línea
+                        factibilidad = int(lineas[0].split("=")[1].strip())
+
+                        # Leer el resto de las líneas y asociar factibilidad a cada valor
+                        valores_con_factibilidad = []
+                        for linea in lineas[2:]:
+                            valor = float(linea.strip())
+                            valores_con_factibilidad.append((valor, factibilidad))
 
                         if instancia not in resultados:
                             resultados[instancia] = []
-                        resultados[instancia].append(valor)
+                        resultados[instancia].extend(valores_con_factibilidad)
             except Exception as e:
                 print(f"Error leyendo el archivo {ruta_completa}: {e}")
 
     # Calcular métricas
     metricas = {}
     for instancia, valores in resultados.items():
-        minimo = min(valores)
-        maximo = max(valores)
-        promedio = sum(valores) / len(valores)
-        metricas[instancia] = {"min": minimo, "max": maximo, "average": promedio}
+        print(valores)
+        # Obtenemos una lista con los primeros elementos de cada tupla
+        primeros_elementos = [tupla[0] for tupla in valores]
+        # Encontramos el índice del menor valor
+        indice_minimo = primeros_elementos.index(min(primeros_elementos))
+        # Obtenemos la tupla correspondiente
+        tupla_menor = valores[indice_minimo]
+        #minimo = min(valores[0])
+        #maximo = max(valores[0])
+        #promedio = sum(valores[0]) / len(valores[0])
+        metricas[instancia] = {"min": f'{round(tupla_menor[0],2)} {tupla_menor[1]}'}
 
     return metricas
 
@@ -62,19 +76,19 @@ for instancia in sorted(instancias):
     fila = {"instance": instancia}
     for tipo, resultados in resultados_totales.items():
         if instancia in resultados:
-            fila[f"{tipo}_prom"] = resultados[instancia]["average"]
+            #fila[f"{tipo}_prom"] = resultados[instancia]["average"]
             fila[f"{tipo}_min"] = resultados[instancia]["min"]
-            fila[f"{tipo}_max"] = resultados[instancia]["max"]
+            #fila[f"{tipo}_max"] = resultados[instancia]["max"]
         else:
-            fila[f"{tipo}_prom"] = None
+            #fila[f"{tipo}_prom"] = None
             fila[f"{tipo}_min"] = None
-            fila[f"{tipo}_max"] = None
+            #fila[f"{tipo}_max"] = None
     data_combined.append(fila)
 
 # Crear el DataFrame combinado
 df_final = pd.DataFrame(data_combined)
 
 # Guardar el DataFrame en un archivo CSV
-df_final.to_csv('comparacion_metricas.csv', index=False)
+df_final.to_csv('comparacion.csv', index=False)
 
-print("Archivo CSV generado: comparacion_metricas.csv")
+print("Archivo CSV generado: comparacion.csv")

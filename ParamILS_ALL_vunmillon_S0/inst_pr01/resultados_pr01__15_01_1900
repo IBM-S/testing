@@ -1,0 +1,60 @@
+time ruby ../paramils2.3.8-source/param_ils_2_3_run.rb -numRun 0 -approach focused -userunlog 1 -validN 0 -pruning 0 -maxEvals 10000 -scenariofile FAll.scn > ParamILS_AGA_ISAll_S0.out
+
+real	86m8,992s
+user	83m34,663s
+sys	3m26,041s
+mv out respaldosGA/outAGA_ISAll_S0
+time ruby ../paramils2.3.8-source/param_ils_2_3_run.rb -numRun 1 -approach focused -userunlog 1 -validN 0 -pruning 0 -maxEvals 10000 -scenariofile FAll.scn > ParamILS_AGA_ISAll_S1.out
+
+real	86m58,759s
+user	84m11,848s
+sys	3m38,492s
+mv out respaldosGA/outAGA_ISAll_S1
+time ruby ../paramils2.3.8-source/param_ils_2_3_run.rb -numRun 2 -approach focused -userunlog 1 -validN 0 -pruning 0 -maxEvals 10000 -scenariofile FAll.scn > ParamILS_AGA_ISAll_S2.out
+
+real	89m35,042s
+user	86m57,802s
+sys	3m28,639s
+mv out respaldosGA/outAGA_ISAll_S2
+time ruby ../paramils2.3.8-source/param_ils_2_3_run.rb -numRun 3 -approach focused -userunlog 1 -validN 0 -pruning 0 -maxEvals 10000 -scenariofile FAll.scn > ParamILS_AGA_ISAll_S3.out
+
+real	74m22,166s
+user	71m41,309s
+sys	3m32,560s
+mv out respaldosGA/outAGA_ISAll_S3
+time ruby ../paramils2.3.8-source/param_ils_2_3_run.rb -numRun 4 -approach focused -userunlog 1 -validN 0 -pruning 0 -maxEvals 10000 -scenariofile FAll.scn > ParamILS_AGA_ISAll_S4.out
+
+real	91m45,985s
+user	89m6,996s
+sys	3m29,548s
+mv out respaldosGA/outAGA_ISAll_S4
+time ruby ../paramils2.3.8-source/param_ils_2_3_run.rb -numRun 5 -approach focused -userunlog 1 -validN 0 -pruning 0 -maxEvals 10000 -scenariofile FAll.scn > ParamILS_AGA_ISAll_S5.out
+
+real	96m13,563s
+user	93m34,430s
+sys	3m30,135s
+mv out respaldosGA/outAGA_ISAll_S5
+time ruby ../paramils2.3.8-source/param_ils_2_3_run.rb -numRun 6 -approach focused -userunlog 1 -validN 0 -pruning 0 -maxEvals 10000 -scenariofile FAll.scn > ParamILS_AGA_ISAll_S6.out
+
+real	87m35,915s
+user	84m57,461s
+sys	3m29,083s
+mv out respaldosGA/outAGA_ISAll_S6
+time ruby ../paramils2.3.8-source/param_ils_2_3_run.rb -numRun 7 -approach focused -userunlog 1 -validN 0 -pruning 0 -maxEvals 10000 -scenariofile FAll.scn > ParamILS_AGA_ISAll_S7.out
+
+real	88m50,356s
+user	86m9,431s
+sys	3m31,875s
+mv out respaldosGA/outAGA_ISAll_S7
+time ruby ../paramils2.3.8-source/param_ils_2_3_run.rb -numRun 8 -approach focused -userunlog 1 -validN 0 -pruning 0 -maxEvals 10000 -scenariofile FAll.scn > ParamILS_AGA_ISAll_S8.out
+
+real	87m16,966s
+user	84m37,336s
+sys	3m30,531s
+mv out respaldosGA/outAGA_ISAll_S8
+time ruby ../paramils2.3.8-source/param_ils_2_3_run.rb -numRun 9 -approach focused -userunlog 1 -validN 0 -pruning 0 -maxEvals 10000 -scenariofile FAll.scn > ParamILS_AGA_ISAll_S9.out
+
+real	97m0,778s
+user	94m26,531s
+sys	3m26,156s
+mv out respaldosGA/outAGA_ISAll_S9
