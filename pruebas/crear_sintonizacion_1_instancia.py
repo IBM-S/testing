@@ -1,6 +1,6 @@
 import os
 
-def create_folder_with_files(folder_name, algorithm_name):
+def create_folder_with_files(folder_name):
     # Ruta base para la carpeta
     base_path = '../ParamILS_ALL_vunmillon_S0'
     folder_path = os.path.join(base_path, f'inst_{folder_name}')
@@ -15,7 +15,7 @@ def create_folder_with_files(folder_name, algorithm_name):
     # Contenido de los archivos
     files_content = {
         "All.inst": f'{folder_name}.vrp',
-        "FAll.scn": f"""algo = bash {algorithm_name}.sh
+        "FAll.scn": f"""algo = bash hgs.sh
 execdir = .
 deterministic = 0
 run_obj = runlength
@@ -28,7 +28,7 @@ outdir = out/
 instance_file = All.inst
 test_instance_file = All.inst
 """,
-        f'{algorithm_name}.sh': """#!/bin/bash
+        f'hgs.sh': """#!/bin/bash
 
 dirInstances="Instances/CVRP"
 instance=$1
@@ -204,5 +204,4 @@ done
 
 if __name__ == "__main__":
     folder_name = input("Introduce el nombre de la carpeta: ")
-    algorithm_name = input("Introduce el nombre del algoritmo (ejemplo: GA.sh): ")
-    create_folder_with_files(folder_name, algorithm_name)
+    create_folder_with_files(folder_name)

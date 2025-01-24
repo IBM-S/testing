@@ -137,8 +137,6 @@ runtime=0
 best_sol=0
 
 
+
+
 echo "Result for ParamILS: ${solved}, ${runtime}, ${quality}, ${best_sol}, ${seed}"
-
-
-
-

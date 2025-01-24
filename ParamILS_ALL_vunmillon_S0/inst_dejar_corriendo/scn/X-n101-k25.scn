@@ -1,0 +1,12 @@
+algo = bash hgs.sh
+execdir = .
+deterministic = 0
+run_obj = runlength
+overall_obj = mean
+cutoff_time = 20
+cutoff_length = max
+tunerTimeout = 20
+paramfile = params.params
+outdir = out/
+instance_file = X-n101-k25.inst
+test_instance_file = X-n101-k25.inst
