@@ -103,11 +103,17 @@ echo "../GA ../${dirInstances}/${instance} ${seed} ${params} > ${screen}"
 ../GA ../Instances/${instance} ${seed} ${params} > ${screen}
 
 quality=`tail -2 ${screen} |head -1 |awk -F ' = ' '{print $2}'`
-
+feasibility=`tail -3 ${screen} |head -1 |awk -F ' = ' '{print $2}'`
 
 solved="SAT"
 runtime=0
 best_sol=0
+
+penalidad=10
+
+if [ "$feasibility" -eq 0 ]; then
+  quality=$(awk "BEGIN {printf \"%d\",(${quality}*${penalidad})}")
+fi
 
 
 echo "Result for ParamILS: ${solved}, ${runtime}, ${quality}, ${best_sol}, ${seed}"
