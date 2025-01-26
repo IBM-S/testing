@@ -2,7 +2,7 @@ import os
 
 # Ruta de la carpeta principal y subcarpetas
 base_dir = "../ParamILS_ALL_vunmillon_S0"
-inst_dir = os.path.join(base_dir, "inst_dejar_corriendo")
+inst_dir = os.path.join(base_dir, "_inst_X_dejar_corriendo")
 to_tune_dir = os.path.join(inst_dir, "toTune")
 scn_dir = os.path.join(inst_dir, "scn")
 ins_dir = os.path.join(inst_dir, "ins")
@@ -18,7 +18,7 @@ instances_dir = "../Instances/CVRP"
 # Lista para almacenar los nombres de las instancias
 instance_names = []
 
-hgs_content = """#!/bin/bash
+hgs_content = """#/bin/bash
 
 dirInstances="Instances/CVRP"
 instance=$1
@@ -156,7 +156,7 @@ best_sol=0
 echo "Result for ParamILS: ${solved}, ${runtime}, ${quality}, ${best_sol}, ${seed}"
 """
 
-todo_paramils_content = """#!/bin/bash
+todo_paramils_content = """#/bin/bash
 
 toTune=$1
 maxEvaluations=10000
@@ -168,13 +168,16 @@ mkdir ${respaldos}
 
 dirInst=ins
 dirScn=scn
-dirOutputs=ouputs
+dirOutputs=outputs
 
 maxSeeds=10
 for instanceSet in $(cat ${toTune}); do
         scenario=${instanceSet}.scn
         instance=${instanceSet}.inst
         params=params.params
+        
+        instanceOutputDir=${dirOutputs}/outs_${instanceSet}
+        mkdir -p ${instanceOutputDir}
         
         mv ${dirScn}/${scenario} .
         mv ${dirInst}/${instance} .
@@ -184,6 +187,8 @@ for instanceSet in $(cat ${toTune}); do
                 outputTuner=ParamILS_A${algo}_IS${instanceSet}_S${seed}.out
                 echo "time ruby ../paramils2.3.8-source/param_ils_2_3_run.rb -numRun ${seed} -approach focused -userunlog 1 -validN 0 -pruning 0 -maxEvals ${maxEvaluations} -scenariofile ${scenario} > ${outputTuner}"
                 time ruby ../paramils2.3.8-source/param_ils_2_3_run.rb -numRun ${seed} -approach focused -userunlog 1 -validN 0 -pruning 0 -maxEvals ${maxEvaluations} -scenariofile ${scenario} > ${outputTuner}
+                
+                mv ${outputTuner} ${instanceOutputDir}/
                 echo "mv out ${respaldos}/outA${algo}_IS${instanceSet}_S${seed}"
                 mv out ${respaldos}/outA${algo}_IS${instanceSet}_S${seed}
                 seed=$((seed + 1))
@@ -252,7 +257,7 @@ test_instance_file = {instance_name}.inst
         with open(inst_path, "w") as inst_file:
             inst_file.write(inst_content)
         
-        if contador == 2:
+        if contador == -1:
             break
         contador+=1
 
