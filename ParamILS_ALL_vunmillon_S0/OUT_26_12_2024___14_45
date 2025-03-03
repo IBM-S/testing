@@ -1,6 +1,0 @@
-time ruby paramils2.3.8-source/param_ils_2_3_run.rb -numRun 0 -approach focused -userunlog 1 -validN 0 -pruning 0 -maxEvals 10000 -scenariofile FAll.scn > ParamILS_AGA_ISAll_S0.out
-
-real	3336m43,774s
-user	3333m38,980s
-sys	3m42,828s
-mv out respaldosGA/outAGA_ISAll_S0
