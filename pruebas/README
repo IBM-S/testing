@@ -1,13 +1,24 @@
+# Codigos
 
-creador_de_comandos.py
-crea por cada instancia, 10 pruebas con 10 semillas distintas, hay que modificar 
+## creador_de_comandos.py
+Crea por cada instancia, 10 pruebas con 10 semillas distintas, hay que modificar 
 la variable configurations.
 Instances: nombre de la instancia
 tipo: tipo de instancia
 file name: el archivo de destino de la linea de codigo para probar el funcionamiento
 
-Ejecucion.cpp
-Ejecuta las lineas de consola por medio de un txt. Primero se rcea el ejecutable:
+Se uso para comprobar si se llegaba a los mismo del paper. Se probaron las instancias X-nA-kB
+Ejecucion: python3 creador_de_comandos.py
+
+## crear_sintonizacion_1_instancia.py
+
+Crea los archivos All.inst, FAll.scn, hgs.sh, ToDoParamILS.sh, dentro de la carpeta
+ParamILS_ALL_vunmillon_S0
+
+Ejecucion: python3 crear_sintonizacion_1_instancia.py
+
+## Ejecucion.cpp
+Ejecuta las lineas de consola por medio de un txt. Primero se crea el ejecutable:
 g++ ejecucion.cpp -o ejec 
 Luego se puede ejecutar de la sgiuente forma
 (1) ./ejec 
@@ -18,13 +29,49 @@ se le puede especificar un archivo txt a probar.
 
 Cuando se ejecuten las lineas, el resultado va a ir a la carpeta sol, y en logs se encontraran las iteraciones del algoritmo (cada 500 iteracion)
 
-ver_resultados.py
+
+## feature_extraction.py
+
+Extrae las caracteristicas de los 3 tipos de instancias "CMT", "GOLDEN" Y "X-nA-kB".
+Se mete a la carpeta Instances y de ahi saca las insntacias y luego las caracteristicas las va dejando en 
+una carpeta lllamada features_inst
+
+Ejecucion: python3 feature_extraction.py
+
+
+## para_dejar_corriendo_CMT.py / para_dejar_corriendo_golden.py / para_dejar_corriendo_X.py
+
+Crea las carpetas correspondientes para los tres tipos de instancias "_inst_{tipo_instancia}_dejar_corriendo".
+Luego crea dentro los archivos necesarios para dejar corriendo la sintonizacion. params.params, hgs.sh, ToDoParamILS.sh. Los archivos
+.scn e .ins se moveran de las carpetas scn e ins cuando se necesiten y luego cuando se dejen de ocupar se moveran donde estban en un
+principio. Esto se hace para cada tipo de instancia {CMT, golden, X} 
+
+
+## ver_resultados.py
 el codigo va a traer los resultados de las instancias, que se encuentran en la carpeta sol
 muestra los valores de cada una de las 10 ejecuciones del algoritmo y tambien el promedio
-de esas 10 ejecucion. Eso por cada instancia
+de esas 10 ejecucion. Eso por cada instancia. Este codigo funciona cuando se ha ejecutado el
+codigo de ejecucion.cpp ya que este crear la carpeta sol.
 
-ver_cap.py
-Calcula la demanda total, la demanda minima, demanda maxima, promedio de demanda y desviacion de la demanda. En la siguiente linea se puede modificar para poder especificar el tipo de instancia:
-if archivo.startswith("Golden_"):
+Ejecucion: python3 ver_resultados.py
 
-_features_CMT
+
+## ver_cap.py
+Calcula la demanda total, la demanda minima, demanda maxima, promedio de demanda y desviacion de la demanda. 
+En la siguiente linea se puede modificar para poder especificar el tipo de instancia (Manualmente hay que cambiar
+el tipo de instancia): "if archivo.startswith("Golden_"):"
+Resultado ejemplo: CMT1.vrp total: 770 - min: 3 - max: 41 - prom: 15.71 - desv: 7.97
+
+Ejecucion: python3 ver_cap.py
+
+## caso_juguete.txt
+Lineas de codigo para probar si el codigo ejecucion.cpp funciona bien
+
+## instancias_comandos.txt
+Lineas de comandos para probar la ejecucion de todas las instancias
+
+## requeriments.txt
+Se intento probar crear un ambiente virtual, pero no se logro.
+
+## resumen_CMT.txt / resumen_Golden.txt
+Es el resultado del codigo ver_cap.py

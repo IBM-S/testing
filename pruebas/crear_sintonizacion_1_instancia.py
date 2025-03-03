@@ -170,7 +170,7 @@ echo "Result for ParamILS: ${solved}, ${runtime}, ${quality}, ${best_sol}, ${see
 
 toTune=$1
 maxEvaluations=10000
-algo=GA
+algo=hgs
 
 respaldos=respaldos${algo}
 rm -rf ${respaldos}
