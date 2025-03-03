@@ -18,7 +18,7 @@ instances_dir = "../ParamILS_ALL_vunmillon_S0/Instances"
 # Lista para almacenar los nombres de las instancias
 instance_names = []
 
-hgs_content = """#/bin/bash
+ga_content = """#/bin/bash
 
 dirInstances="Instances"
 instance=$1
@@ -151,7 +151,7 @@ mkdir ${respaldos}
 
 dirInst=ins
 dirScn=scn
-dirOutputs=ouputs
+dirOutputs=outputs
         
 mkdir -p ${dirOutputs}
 
@@ -201,9 +201,9 @@ populationSize {50, 100, 200, 400, 500, 800, 1000, 2000}[400]
 """
 
 
-# Crear archivos hgs.sh y ToDoParamILS.sh
-with open(os.path.join(inst_dir, "GA.sh"), "w") as hgs_file:
-    hgs_file.write(hgs_content)
+# Crear archivos ga.sh y ToDoParamILS.sh
+with open(os.path.join(inst_dir, "GA.sh"), "w") as ga_file:
+    ga_file.write(ga_content)
 
 with open(os.path.join(inst_dir, "ToDoParamILS.sh"), "w") as todo_file:
     todo_file.write(todo_paramils_content)
@@ -257,4 +257,4 @@ print(f"Archivos creados correctamente en las carpetas:\n"
       f"  - {scn_dir} (archivos .scn)\n"
       f"  - {ins_dir} (archivos .inst)\n"
       f"  - {to_tune_dir} (archivo All.tune)\n"
-      f"  - {inst_dir} (archivos hgs.sh, ToDoParamILS.sh y params.params).")
+      f"  - {inst_dir} (archivos ga.sh, ToDoParamILS.sh y params.params).")
