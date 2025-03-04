@@ -1,4 +1,5 @@
 import os
+import re
 import pandas as pd
 
 def leer_archivo_result(ruta_completa):
@@ -36,9 +37,12 @@ def procesar_resultados(ruta_principal):
         pd.DataFrame: DataFrame con los resultados consolidados.
     """
     data = []
+    patron = re.compile(r"^inst_pr\d+$")
+
     # Iterar sobre las carpetas de instancias
     for instancia in os.listdir(ruta_principal):
-        if ("inst_") in instancia:
+
+        if patron.match(instancia): 
             ruta_instancia = os.path.join(ruta_principal, instancia)
             if not os.path.isdir(ruta_instancia):
                 continue
@@ -74,6 +78,6 @@ ruta_principal = "ParamILS_ALL_vunmillon_S0"
 df_resultados = procesar_resultados(ruta_principal)
 
 # Guardar el DataFrame en un archivo CSV
-df_resultados.to_csv('resultados_parametros.csv', index=False)
+df_resultados.to_csv('resultados_parametros_pr.csv', index=False)
 
-print("Archivo CSV generado: resultados_parametros.csv")
+print("Archivo CSV generado: resultados_parametros_pr.csv")

@@ -55,8 +55,8 @@ def transform_line(line, nombre_algoritmo):
 # Leer el archivo de resultados (reemplaza 'resultados_KNN' con el nombre del archivo correcto)
 nombre = ["ANN", "KNN", "RF"]
 for i in iter(nombre):
-    with open(f'resultados_{i}.txt', 'r') as f:
-        with open(f'salida_{i}.txt', 'w') as output_file:
+    with open(f'resultados_{i}_v2.txt', 'r') as f:
+        with open(f'salida_{i}_v2.txt', 'w') as output_file:
             for line in f:
                 # Ignorar la primera línea si contiene encabezados
                 if line.startswith('instance'):

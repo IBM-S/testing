@@ -89,6 +89,6 @@ for instancia in sorted(instancias):
 df_final = pd.DataFrame(data_combined)
 
 # Guardar el DataFrame en un archivo CSV
-df_final.to_csv('comparacion.csv', index=False)
+df_final.to_csv('comparacion_min_v2.csv', index=False)
 
-print("Archivo CSV generado: comparacion.csv")
+print("Archivo CSV generado: comparacion_min_v2.csv")
