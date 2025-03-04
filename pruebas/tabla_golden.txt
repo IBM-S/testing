@@ -1,0 +1,33 @@
+\begin{table}[!ht]
+\centering
+\begin{tabular}{cc|c|ccc}
+\toprule
+Inst. & n & BKS & \multicolumn{3}{c}{Best(HGS) On 10 runs} \\
+      &   & (2023) & ANN & KNN & RF\\
+\midrule
+Golden\_1 & 240 & bks & ANN & KNN & RF \\
+Golden\_2 & 320 & bks & ANN & KNN & RF \\
+Golden\_3 & 400 & bks & ANN & KNN & RF \\
+Golden\_4 & 480 & bks & ANN & KNN & RF \\
+Golden\_5 & 200 & bks & ANN & KNN & RF \\
+Golden\_6 & 280 & bks & ANN & KNN & RF \\
+Golden\_7 & 360 & bks & ANN & KNN & RF \\
+Golden\_8 & 440 & bks & ANN & KNN & RF \\
+Golden\_9 & 255 & bks & ANN & KNN & RF \\
+Golden\_10 & 323 & bks & ANN & KNN & RF \\
+Golden\_11 & 399 & bks & ANN & KNN & RF \\
+Golden\_12 & 483 & bks & ANN & KNN & RF \\
+Golden\_13 & 252 & bks & ANN & KNN & RF \\
+Golden\_14 & 320 & bks & ANN & KNN & RF \\
+Golden\_15 & 396 & bks & ANN & KNN & RF \\
+Golden\_16 & 480 & bks & ANN & KNN & RF \\
+Golden\_17 & 240 & bks & ANN & KNN & RF \\
+Golden\_18 & 300 & bks & ANN & KNN & RF \\
+Golden\_19 & 360 & bks & ANN & KNN & RF \\
+Golden\_20 & 420 & bks & ANN & KNN & RF \\
+\bottomrule
+\end{tabular}
+\caption{Resultados finales para golden. n: número de clientes.}
+\label{tab:Instancias_golden}
+\end{table}
+

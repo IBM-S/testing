@@ -1,0 +1,113 @@
+\begin{table}[!ht]
+\centering
+\begin{tabular}{cc|c|ccc}
+\toprule
+Inst. & n & BKS & \multicolumn{3}{c}{Best(HGS) On 10 runs} \\
+      &   & (2023) & ANN & KNN & RF\\
+\midrule
+X-n101-k25 & 100 & bks & ANN & KNN & RF \\
+X-n106-k14 & 105 & bks & ANN & KNN & RF \\
+X-n110-k13 & 109 & bks & ANN & KNN & RF \\
+X-n115-k10 & 114 & bks & ANN & KNN & RF \\
+X-n120-k6 & 119 & bks & ANN & KNN & RF \\
+X-n125-k30 & 124 & bks & ANN & KNN & RF \\
+X-n129-k18 & 128 & bks & ANN & KNN & RF \\
+X-n134-k13 & 133 & bks & ANN & KNN & RF \\
+X-n139-k10 & 138 & bks & ANN & KNN & RF \\
+X-n143-k7 & 142 & bks & ANN & KNN & RF \\
+X-n148-k46 & 147 & bks & ANN & KNN & RF \\
+X-n153-k22 & 152 & bks & ANN & KNN & RF \\
+X-n157-k13 & 156 & bks & ANN & KNN & RF \\
+X-n162-k11 & 161 & bks & ANN & KNN & RF \\
+X-n167-k10 & 166 & bks & ANN & KNN & RF \\
+X-n172-k51 & 171 & bks & ANN & KNN & RF \\
+X-n176-k26 & 175 & bks & ANN & KNN & RF \\
+X-n181-k23 & 180 & bks & ANN & KNN & RF \\
+X-n186-k15 & 185 & bks & ANN & KNN & RF \\
+X-n190-k8 & 189 & bks & ANN & KNN & RF \\
+X-n195-k51 & 194 & bks & ANN & KNN & RF \\
+X-n200-k36 & 199 & bks & ANN & KNN & RF \\
+X-n204-k19 & 203 & bks & ANN & KNN & RF \\
+X-n209-k16 & 208 & bks & ANN & KNN & RF \\
+X-n214-k11 & 213 & bks & ANN & KNN & RF \\
+X-n219-k73 & 218 & bks & ANN & KNN & RF \\
+X-n223-k34 & 222 & bks & ANN & KNN & RF \\
+X-n228-k23 & 227 & bks & ANN & KNN & RF \\
+X-n233-k16 & 232 & bks & ANN & KNN & RF \\
+X-n237-k14 & 236 & bks & ANN & KNN & RF \\
+X-n242-k48 & 241 & bks & ANN & KNN & RF \\
+X-n247-k50 & 246 & bks & ANN & KNN & RF \\
+X-n251-k28 & 250 & bks & ANN & KNN & RF \\
+X-n256-k16 & 255 & bks & ANN & KNN & RF \\
+X-n261-k13 & 260 & bks & ANN & KNN & RF \\
+X-n266-k58 & 265 & bks & ANN & KNN & RF \\
+X-n270-k35 & 269 & bks & ANN & KNN & RF \\
+X-n275-k28 & 274 & bks & ANN & KNN & RF \\
+X-n280-k17 & 279 & bks & ANN & KNN & RF \\
+X-n284-k15 & 283 & bks & ANN & KNN & RF \\
+X-n289-k60 & 288 & bks & ANN & KNN & RF \\
+X-n294-k50 & 293 & bks & ANN & KNN & RF \\
+X-n298-k31 & 297 & bks & ANN & KNN & RF \\
+X-n303-k21 & 302 & bks & ANN & KNN & RF \\
+X-n308-k13 & 307 & bks & ANN & KNN & RF \\
+X-n313-k71 & 312 & bks & ANN & KNN & RF \\
+X-n317-k53 & 316 & bks & ANN & KNN & RF \\
+X-n322-k28 & 321 & bks & ANN & KNN & RF \\
+X-n327-k20 & 326 & bks & ANN & KNN & RF \\
+X-n331-k15 & 330 & bks & ANN & KNN & RF \\
+X-n336-k84 & 335 & bks & ANN & KNN & RF \\
+X-n344-k43 & 343 & bks & ANN & KNN & RF \\
+X-n351-k40 & 350 & bks & ANN & KNN & RF \\
+X-n359-k29 & 358 & bks & ANN & KNN & RF \\
+X-n367-k17 & 366 & bks & ANN & KNN & RF \\
+X-n376-k94 & 375 & bks & ANN & KNN & RF \\
+X-n384-k52 & 383 & bks & ANN & KNN & RF \\
+X-n393-k38 & 392 & bks & ANN & KNN & RF \\
+X-n401-k29 & 400 & bks & ANN & KNN & RF \\
+X-n411-k19 & 410 & bks & ANN & KNN & RF \\
+X-n420-k130 & 419 & bks & ANN & KNN & RF \\
+X-n429-k61 & 428 & bks & ANN & KNN & RF \\
+X-n439-k37 & 438 & bks & ANN & KNN & RF \\
+X-n449-k29 & 448 & bks & ANN & KNN & RF \\
+X-n459-k26 & 458 & bks & ANN & KNN & RF \\
+X-n469-k138 & 468 & bks & ANN & KNN & RF \\
+X-n480-k70 & 479 & bks & ANN & KNN & RF \\
+X-n491-k59 & 490 & bks & ANN & KNN & RF \\
+X-n502-k39 & 501 & bks & ANN & KNN & RF \\
+X-n513-k21 & 512 & bks & ANN & KNN & RF \\
+X-n524-k153 & 523 & bks & ANN & KNN & RF \\
+X-n536-k96 & 535 & bks & ANN & KNN & RF \\
+X-n548-k50 & 547 & bks & ANN & KNN & RF \\
+X-n561-k42 & 560 & bks & ANN & KNN & RF \\
+X-n573-k30 & 572 & bks & ANN & KNN & RF \\
+X-n586-k159 & 585 & bks & ANN & KNN & RF \\
+X-n599-k92 & 598 & bks & ANN & KNN & RF \\
+X-n613-k62 & 612 & bks & ANN & KNN & RF \\
+X-n627-k43 & 626 & bks & ANN & KNN & RF \\
+X-n641-k35 & 640 & bks & ANN & KNN & RF \\
+X-n655-k131 & 654 & bks & ANN & KNN & RF \\
+X-n670-k130 & 669 & bks & ANN & KNN & RF \\
+X-n685-k75 & 684 & bks & ANN & KNN & RF \\
+X-n701-k44 & 700 & bks & ANN & KNN & RF \\
+X-n716-k35 & 715 & bks & ANN & KNN & RF \\
+X-n733-k159 & 732 & bks & ANN & KNN & RF \\
+X-n749-k98 & 748 & bks & ANN & KNN & RF \\
+X-n766-k71 & 765 & bks & ANN & KNN & RF \\
+X-n783-k48 & 782 & bks & ANN & KNN & RF \\
+X-n801-k40 & 800 & bks & ANN & KNN & RF \\
+X-n819-k171 & 818 & bks & ANN & KNN & RF \\
+X-n837-k142 & 836 & bks & ANN & KNN & RF \\
+X-n856-k95 & 855 & bks & ANN & KNN & RF \\
+X-n876-k59 & 875 & bks & ANN & KNN & RF \\
+X-n895-k37 & 894 & bks & ANN & KNN & RF \\
+X-n916-k207 & 915 & bks & ANN & KNN & RF \\
+X-n936-k151 & 935 & bks & ANN & KNN & RF \\
+X-n957-k87 & 956 & bks & ANN & KNN & RF \\
+X-n979-k58 & 978 & bks & ANN & KNN & RF \\
+X-n1001-k43 & 1000 & bks & ANN & KNN & RF \\
+\bottomrule
+\end{tabular}
+\caption{Resultados finales para X-nA-kB. n: número de clientes.}
+\label{tab:Instancias_X-nA-kB}
+\end{table}
+

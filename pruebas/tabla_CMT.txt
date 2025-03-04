@@ -1,0 +1,27 @@
+\begin{table}[!ht]
+\centering
+\begin{tabular}{cc|c|ccc}
+\toprule
+Inst. & n & BKS & \multicolumn{3}{c}{Best(HGS) On 10 runs} \\
+      &   & (2023) & ANN & KNN & RF\\
+\midrule
+CMT1 & 50 & bks & ANN & KNN & RF \\
+CMT2 & 75 & bks & ANN & KNN & RF \\
+CMT3 & 100 & bks & ANN & KNN & RF \\
+CMT4 & 150 & bks & ANN & KNN & RF \\
+CMT5 & 199 & bks & ANN & KNN & RF \\
+CMT6 & 50 & bks & ANN & KNN & RF \\
+CMT7 & 75 & bks & ANN & KNN & RF \\
+CMT8 & 100 & bks & ANN & KNN & RF \\
+CMT9 & 150 & bks & ANN & KNN & RF \\
+CMT10 & 199 & bks & ANN & KNN & RF \\
+CMT11 & 120 & bks & ANN & KNN & RF \\
+CMT12 & 100 & bks & ANN & KNN & RF \\
+CMT13 & 120 & bks & ANN & KNN & RF \\
+CMT14 & 100 & bks & ANN & KNN & RF \\
+\bottomrule
+\end{tabular}
+\caption{Resultados finales para CMT. n: número de clientes.}
+\label{tab:Instancias_CMT}
+\end{table}
+
