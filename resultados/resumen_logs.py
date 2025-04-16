@@ -4,7 +4,7 @@ import os
 carpetas = ["logs_ANN", "logs_KNN", "logs_RF"]
 
 for carpeta in carpetas:
-    resultado_path = os.path.join(carpeta, "resultados.txt")
+    resultado_path = os.path.join(carpeta, "resultados_v3.txt")
     
     with open(resultado_path, "w") as resultado_file:
         # Obtener todos los archivos en la carpeta que empiezan con "salida_"

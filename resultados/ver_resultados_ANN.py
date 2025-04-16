@@ -52,6 +52,6 @@ ruta_logs = "logs"
 df_metricas = calcular_metricas(ruta_logs)
 
 # Guardar el DataFrame en un archivo CSV
-df_metricas.to_csv('metricas_instancias_v2.csv', index=False)
+df_metricas.to_csv('metricas_instancias_v3.csv', index=False)
 
-print("Archivo CSV generado: metricas_instancias_v2.csv")
+print("Archivo CSV generado: metricas_instancias_v3.csv")
